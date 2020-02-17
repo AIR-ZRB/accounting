@@ -11,38 +11,45 @@ Vue.use(Vuex);
 
 import router from "./router.js"
 import view from "./page/index.vue";
+import "file-saver";
 
-
+// 测试代码，一进来就下载文件
+var file = new File(["hello world"], "hello world.txt", {type: "text/plain;charset=utf-8"});
+saveAs(file);
 
 
 // 注册组件
 // 1.对话组件
 
-
 // 未解决的问题
-	// 1. 判断发送窗口是wife还是me
+	// 1. 判断发送窗口是wife还是me(已解决)
+
 let conversationTemplate = `
 <!-- 会话组件 -->
 <div :class="[pople,conversation]">
-	<img src="portrait.png" alt="">
-	<p class="dialogue">{{this.show()}}</p>
+	<img :src="picture" alt="">
+	<p class="dialogue">
+		<span>{{this.type}}</span>
+		<span>{{this.dialogue}}</span>
+	</p>
 </div>
 `;
 
 
 Vue.component("conversation",{
 	template: conversationTemplate,
-	props:["person"],
+	props:["person","dialogue","type"],
 	data(){
 		return {
 			pople: "wife",
-			conversation: "conversation"
+			conversation: "conversation",
+			picture: require("./images/portrait.png"),
 		}
 	},
 	methods:{
-		show(el){
-			// console.log(el);
-			return "111111111111111111111111";
+		show(){
+			console.log(this.dialogue)
+			return this.dialogue;
 		},
 		who(){
 			// 判断是谁该输入
@@ -55,6 +62,7 @@ Vue.component("conversation",{
 	},
 	created(){
 		this.who();
+		this.show();
 	}
 });
 
