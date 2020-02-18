@@ -14,16 +14,14 @@ import view from "./page/index.vue";
 import "file-saver";
 
 // 测试代码，一进来就下载文件
-var file = new File(["hello world"], "hello world.txt", {type: "text/plain;charset=utf-8"});
-saveAs(file);
-
+// var file = new File(["hello world"], "hello world.txt", {type: "text/plain;charset=utf-8"});
+// saveAs(file);
 
 // 注册组件
 // 1.对话组件
 
 // 未解决的问题
 	// 1. 判断发送窗口是wife还是me(已解决)
-
 let conversationTemplate = `
 <!-- 会话组件 -->
 <div :class="[pople,conversation]">
