@@ -9,7 +9,7 @@ import setting from "./page/setting.vue";
 
 export default new VueRouter({
 	routes: [
-		{path:"/",redirect:"dialogue"},
+		{path:"/",redirect:"home"},
 		{path:"/home",component:dialogue},
 		{path:"/month",component:month},
 		{path:"/setting",component:setting},
