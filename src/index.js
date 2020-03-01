@@ -6,7 +6,12 @@ Vue.use(VueRouter);
 import Vuex from "vuex";
 Vue.use(Vuex);
 
+import axios from "axios";
+Vue.prototype.$axios = axios;
 
+
+
+import "./lib/font/iconfont.css";
 
 
 import router from "./router.js"
@@ -20,11 +25,20 @@ import "./component.js";
 const store = new Vuex.Store({
 	state: {
 		wife: "星野日向",		// 老婆名字
+		wifePicture : require("./images/portrait.png"), 	//老婆头像
+		meId: "青空",
 		allExpense: 0,			// 总共花销
 		todayExpense: 0,		// 今日花销
 		breakfast: 0,
 		lunch: 0,
-		supper: 0
+		supper: 0,
+		beverages: 0,
+		snacks: 0,
+		fruits: 0,
+		telephoneCharge: 0,
+		rests: 0,
+		isShowTabs: false,
+	
 	},
 	mutations: {
 		// vuex的第一个参数都是接收state
@@ -61,4 +75,3 @@ const vm = new Vue({
 		return createElement(view);
 	}
 })
-document.body.scrollTop= "-200px";

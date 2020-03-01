@@ -1,16 +1,24 @@
 <template>
     <div>
+        <header class="dialogueHeader">
+            <p class="wife-name">{{this.$store.getters.editWife}}</p>
+            <p>
+                <span class="month">2月</span>
+                <span class="money">100收入 / {{this.$store.getters.editExpenditure}}支出</span>
+            </p>
+            <div class="setting"></div>
+        </header>
+
         <div class="center" ref="screen">
             <!-- 路由部分 -->
 
-            <conversation person="wife" dialogue="你好"></conversation>
-            <!-- 给key传值需要修改 -->
+            <!-- 对话组件 -->
             <conversation
-                person="me"
-                :dialogue="item.money"
+                :person="item.person"
+                :dialogue="item.content"
                 :type="item.type"
-                v-for="item in this.meDialogue"
                 :key="item.money"
+                v-for="item in this.Dialogue"
             ></conversation>
         </div>
 
@@ -31,13 +39,14 @@
         <!-- 类型 -->
         <transition>
             <div class="selectType" v-show="show">
+                <!-- <div class="selectType"> -->
                 <ul>
                     <li
                         class="typesCircle"
                         v-for="item in types"
-                        :key="item.name"
-                        @click="getType(item.name)"
-                    >{{item.name}}</li>
+                        :key="item.name.CN"
+                        @click="getType(item.name.CN)"
+                    >{{item.name.CN}}</li>
                 </ul>
             </div>
         </transition>
@@ -47,10 +56,37 @@
 // 会话框(组件的样式)
 $subjectColor: skyblue;
 
+.dialogueHeader {
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    // background: skyblue;
+    position: fixed;
+    top: 0;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    text-align: center;
+
+    .wife-name {
+        font-weight: 700;
+    }
+
+    .money,
+    .month {
+        font-size: 12px;
+    }
+    .setting {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
 .center {
     padding: 5px;
-    overflow: scroll;
-    // clear: both;
+    overflow: hidden;
     .conversation {
         max-width: 90%;
         min-width: 70%;
@@ -119,7 +155,7 @@ footer {
     }
     .frame {
         position: relative;
-        width: 80%;
+        width: 85%;
         float: right;
         .type {
             position: absolute;
@@ -149,25 +185,31 @@ footer {
     background: purple;
     position: absolute;
     bottom: 0;
-    padding: 10px 15px;
-    transform: translateY(0);
+    padding: 10px 20px;
+    transform: translateY(0px);
+    border-radius: 10px 10px 0 0;
+    opacity: 0.5;
 
     ul {
         width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-content: space-around;
+        flex-wrap: wrap;
+
         .typesCircle {
             list-style: none;
-            flex: 1;
-            width: 50px;
-            margin: 0 20px 20px 0;
+
+            width: 15%;
+            margin: 0 30px 0 0;
+            // margin: 10px 10px 10px 10px;
             height: 50px;
             line-height: 50px;
             text-align: center;
             border-radius: 50%;
             background: skyblue;
             float: left;
-        }
-        :nth-child(5n) {
-            margin-right: 0px;
         }
     }
 }
@@ -177,7 +219,7 @@ footer {
     height: 100px;
     text-align: center;
     line-height: 20px;
-    border-radius: 5px; 
+    border-radius: 10px;
     position: fixed;
     top: 0;
     left: 0;
@@ -189,6 +231,8 @@ footer {
     padding: 40px 20px;
 }
 
+// tab栏动画
+
 .alert-enter,
 .alert-leave-to {
     opacity: 0;
@@ -198,7 +242,6 @@ footer {
 .alert-leave-active {
     transition: all 1s;
 }
-
 </style>
 <script>
 export default {
@@ -209,37 +252,16 @@ export default {
             show: false,
             showAlert: false,
             types: [
-                { name: "早餐", price: 0 },
-                { name: "午餐", price: 0 },
-                { name: "晚餐", price: 0 },
-                { name: "其他", price: 0 },
-                { name: "购物", price: 0 },
-                { name: "零食", price: 0 }
+                { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
+                { name: { CN: "午餐", EN: "lunch" }, price: 0 },
+                { name: { CN: "晚餐", EN: "supper" }, price: 0 },
+                { name: { CN: "饮料", EN: "beverages" }, price: 0 },
+                { name: { CN: "零食", EN: "snacks" }, price: 0 },
+                { name: { CN: "水果", EN: "fruits" }, price: 0 },
+                { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 }
             ],
-            meDialogue: [
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-                { type: "早餐", money: 0 },
-            ]
+            Dialogue: [{ content: "你好", person: "wife" }]
         };
     },
     methods: {
@@ -250,65 +272,78 @@ export default {
             this.show = !this.show;
             this.type = type;
         },
-        commit(type, money) {   
+        commit(type, money) {
             // 发送消息告诉对方
 
-            if(!type){
+            if (!type) {
                 // 如果没有选择类型则弹窗警告
                 this.showAlert = !this.showAlert;
-                let timer = setTimeout(()=>{
+                let timer = setTimeout(() => {
                     clearInterval(timer);
                     this.showAlert = !this.showAlert;
-                },3000)
+                }, 1000);
                 return;
             }
 
-            // 添加对话
-            this.meDialogue.push({ type, money });
+            this.Dialogue.push({ type, content: money, person: "me" });
 
-            // 添加到vuex
-            switch (type) {
-                case "早餐":
-                    this.$store.commit("revise",{
-                        name: "breakfast",
-                        value: money
-                    })
-                    break;
-
-                case "午餐":
-                    this.$store.commit("revise",{
-                        name: "lunch",
-                        value: money
-                    })
-                    break;
-
-                case "晚餐":
-                    this.$store.commit("revise",{
-                        name: "supper",
-                        value: money
-                    })
-                    break;
-            }
-
+            this.types.forEach((item, index) => {
+                // 获取随机对话(根据类型)
+                item.name.CN == type
+                    ? this.getWifeDialogue(item.name.EN)
+                    : null;
+                // 判断类型
+                item.name.CN == type
+                    ? this.judgeType(item.name.EN, money)
+                    : null;
+            });
+        },
+        // 让屏幕一直处于最底下
+        windowScrollBottom() {
             // 获取网页的可视区域的高度
-            // console.log(document.body.clientHeight);
-
-            // console.log(this.$refs.screen.offsetHeight);
-            // console.log(document.body.clientHeight);
-            if(document.body.clientHeight - 100 <= this.$refs.screen.offsetHeight){
-                // 监听滚动，如果内容大于screen就滚动到最底(没头绪)
-                let scrollMove = this.$refs.screen.offsetHeight - document.body.clientHeight 
-            
+            if (window.screen.height - 234 <= this.$refs.screen.offsetHeight) {
+                // 监听滚动，如果内容大于screen就滚动到最底
+                let scrollMove =
+                    this.$refs.screen.offsetHeight + 336 - window.screen.height;
+                window.scrollTo(0, scrollMove);
             }
+        },
+        // 让wife随机对话
+        getWifeDialogue(type, money) {
+            // 获取本地文件的语录
+            this.$axios.get("./data/dialogue.json").then(res => {
+                console.log(res);
+                let randomDialogue = parseInt(
+                    Math.random() * res.data[type].length
+                );
+                console.log(res.data[type[randomDialogue]]);
+                this.Dialogue.push({
+                    content: res.data[type][randomDialogue],
+                    person: "wife"
+                });
+            });
+        },
+        // 添加到vuex里去
+        judgeType(type, money) {
+            this.$store.commit("revise", {
+                name: type,
+                value: money
+            });
+        },
+        // 写入localStorage
+        writeLocalStorage() {
+            window.localStorage.setItem();
         }
     },
-    created(){
-    
-       
+
+    // 生命周期函数
+    created() {
+        window.localStorage.setItem("asdklfjlaskd", "hello");
     },
-    mounted(){
-      document.body.scrollTop= "-200px";
+    mounted() {},
+    updated() {
+        // 让页面始终再最底部
+        this.windowScrollBottom();
     }
-    // props: ["dialogue"]
 };
 </script>

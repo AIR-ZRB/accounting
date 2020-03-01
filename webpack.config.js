@@ -1,32 +1,39 @@
-const [webpack,path] = [require("webpack"),require("path")];
+const [webpack, path] = [require("webpack"), require("path")];
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
-	entry: path.join(__dirname,"src/index.js"),
+	entry: path.join(__dirname, "src/index.js"),
 	output: {
-		path: path.join(__dirname,"dist"),
+		path: path.join(__dirname, "dist"),
 		publicPath: "/",
 		filename: "bundle.js"
 	},
-	plugins:[
+	plugins: [
 		new VueLoaderPlugin()
 	],
 	module: {
-		rules:[
-			{test:/\.vue$/,use:["vue-loader"]},
-			{test:/\.scss$/,use:["style-loader","css-loader","sass-loader"]},
+		rules: [
+			{ test: /\.vue$/, use: ["vue-loader"] },
+			{ test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
+			{ test: /\.css$/, use: ["style-loader", "css-loader"] },
 			// {test:/\.(jpg | png | gif)$/,use:[
-			{test:/\.png$/,use:[
-				{
-					loader:"url-loader?limit=1024",
-					options:{
-						esModule: false,
-						// outputPath: "/",
-              			publicPath:'dist/',
+			{
+				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/, use: [
+					{
+						loader: "url-loader?limit=1024",
+						options: {
+							esModule: false,
+							// outputPath: "/",
+							publicPath: 'dist/',
+						}
 					}
-				}
-			]}
+				]
+			},
+			{
+				test: /\.(woff|svg|eot|ttf)\??.*$/,
+				loader: "url-loader?name=fonts/[name].[md5:hash:hex:6].[ext]"
+			}
 		]
 	}
-	
+
 
 }	

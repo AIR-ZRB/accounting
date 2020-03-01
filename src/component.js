@@ -1,12 +1,7 @@
 import Vue from "vue/dist/vue.js";
 
 
-
-
 // 注册组件
-
-
-
 
 
 // 弹窗
@@ -102,20 +97,26 @@ let optionsFilesList = `
         <span class="right">
             <img src="" id="img" />
         </span>
+        <div class="editImage"  v-show="isShowEditImg">
+
+        </div>
     </li>
+    
 `
 
 Vue.component("optionsFilesList",{
     template: optionsFilesList,
+    data(){
+        return{
+            isShowEditImg: false
+        }
+    },
     props: ["optionName","default"],
     methods: {
-
-
-
         // 设置页面的换头像功能
         // 多个组件只有第一个生效
         uploadfile(event) {
-
+            let _this = this;
             // console.log(this);
             let reads = new FileReader();
             let file = document.getElementById('file').files[0];
@@ -125,25 +126,21 @@ Vue.component("optionsFilesList",{
             // console.log(event.target.parentNode.getElementsByTagName("img")[0]);
             reads.onloadend = function (e) {
                 // console.log(event);
+
+                console.log(this.result);
                 event.target.parentNode.getElementsByTagName("img")[0].src = this.result;
-                // document.getElementById('img').src = this.result;
-    
+
+                // 选择图片区域
+                event.target.parentNode.getElementsByClassName("editImage")[0].style.backgroundImage = "url("+this.result+")";
+                _this.isShowEditImg = true;
+
+
+
+
+
             };
 
           
-
-        // let selectImg = document.getElementsByClassName("selectImg");
-        //     selectImg.forEach((item,index)=>{
-        //         item.onclick = function(){
-        //             this.getElementsByClassName("right")[0].getElementsByTagName("img")[0].src
-        //         }
-        //     })
-
-
-
-
-
-
           
         }
     }
