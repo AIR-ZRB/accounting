@@ -200,13 +200,7 @@ export default {
             window.history.go(-1);
         },
         setting(){
-            console.log(11);
-            // console.log(this.showTabs());
-            // console.
-            // this.$emit("showTabs");
-        
-
-
+            
         },
         edit() {
             this.editShow = true;

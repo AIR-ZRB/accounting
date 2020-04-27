@@ -71,7 +71,7 @@
                         </svg>
                         <a href="#/setting">Setting</a>
                     </li>
-                    <li :class="{tabActive: this.tabActive == '/setting' ? true : false }">
+                    <li :class="{tabActive: this.tabActive == '/about' ? true : false }">
                         <svg
                             class="icon tabs-icon"
                             style="vertical-align: middle;fill: currentColor;overflow: hidden;"

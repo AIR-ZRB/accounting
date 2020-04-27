@@ -312,11 +312,13 @@ export default {
         getWifeDialogue(type, money) {
             // 获取本地文件的语录
             this.$axios.get("./data/dialogue.json").then(res => {
-                console.log(res);
+
+                // 获取随机对话的索引
                 let randomDialogue = parseInt(
                     Math.random() * res.data[type].length
                 );
                 console.log(res.data[type[randomDialogue]]);
+                // 添加到对话中去
                 this.Dialogue.push({
                     content: res.data[type][randomDialogue],
                     person: "wife"
