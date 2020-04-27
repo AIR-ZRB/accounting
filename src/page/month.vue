@@ -19,6 +19,50 @@
         </div>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            sevenWord: ["一", "二", "三", "四", "五", "六", "七"],
+            today: 1,
+            month: 1,
+            MonthFirstDayWeek: 1,
+            MonthDays: 1,
+            FullYear: 2020
+        };
+    },
+    methods: {
+        getMonth() {
+            let date = new Date();
+            // 获得日
+            console.log(date.getDate());
+
+            // 获取今天几号1~31
+            this.today = date.getDate();
+
+            // 获得月0~11
+            this.month = date.getMonth();
+            this.FullYear = date.getFullYear();
+            console.log(this.FullYear);
+
+            // 获得一个月又多少天
+            this.MonthDays = new Date(2020, this.month + 1, 0).getDate();
+            console.log(this.MonthDays);
+
+            // 获取每个月第一天的星期，用来做渲染
+            this.MonthFirstDayWeek = new Date(2020, this.month, 1).getUTCDay();
+            console.log(this.MonthFirstDayWeek);
+        }
+    },
+    created() {
+        this.getMonth();
+    }
+};
+</script>
+
+
+
+
 <style lang="scss" >
 $subColor: #f0f1f3;
 .monthContainer {
@@ -94,46 +138,3 @@ $subColor: #f0f1f3;
     }
 }
 </style>
-<script>
-export default {
-    data() {
-        return {
-            sevenWord: ["一", "二", "三", "四", "五", "六", "七"],
-            today: 1,
-            month: 1,
-            MonthFirstDayWeek: 1,
-            MonthDays: 1,
-            FullYear: 2020
-        };
-    },
-    methods: {
-        goBack() {
-            window.history.go(-1);
-        },
-        getMonth() {
-            let date = new Date();
-            // 获得日
-            console.log(date.getDate());
-
-            // 获取今天几号1~31
-            this.today = date.getDate();
-
-            // 获得月0~11
-            this.month = date.getMonth();
-            this.FullYear = date.getFullYear();
-            console.log(this.FullYear);
-
-            // 获得一个月又多少天
-            this.MonthDays = new Date(2020, this.month + 1, 0).getDate();
-            console.log(this.MonthDays);
-
-            // 获取每个月第一天的星期，用来做渲染
-            this.MonthFirstDayWeek = new Date(2020, this.month, 1).getUTCDay();
-            console.log(this.MonthFirstDayWeek);
-        }
-    },
-    created() {
-        this.getMonth();
-    }
-};
-</script>

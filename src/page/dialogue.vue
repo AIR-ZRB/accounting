@@ -44,6 +44,114 @@
         </transition>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            money: 0,
+            type: "",
+            show: false,
+            showAlert: false,
+            types: [
+                { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
+                { name: { CN: "午餐", EN: "lunch" }, price: 0 },
+                { name: { CN: "晚餐", EN: "supper" }, price: 0 },
+                { name: { CN: "饮料", EN: "beverages" }, price: 0 },
+                { name: { CN: "零食", EN: "snacks" }, price: 0 },
+                { name: { CN: "水果", EN: "fruits" }, price: 0 },
+                { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 }
+            ],
+            Dialogue: [{ content: "你好", person: "wife" }]
+        };
+    },
+    methods: {
+        showSelect() {
+            this.show = !this.show;
+        },
+        getType(type) {
+            this.show = !this.show;
+            this.type = type;
+        },
+        commit(type, money) {
+            // 发送消息告诉对方
+
+            if (!type) {
+                // 如果没有选择类型则弹窗警告
+                this.showAlert = !this.showAlert;
+                let timer = setTimeout(() => {
+                    clearInterval(timer);
+                    this.showAlert = !this.showAlert;
+                }, 1000);
+                return;
+            }
+
+            this.Dialogue.push({ type, content: money, person: "me" });
+
+            this.types.forEach((item, index) => {
+                // 获取随机对话(根据类型)
+                item.name.CN == type
+                    ? this.getWifeDialogue(item.name.EN)
+                    : null;
+                // 判断类型
+                item.name.CN == type
+                    ? this.judgeType(item.name.EN, money)
+                    : null;
+            });
+        },
+        // 让屏幕一直处于最底下
+        windowScrollBottom() {
+            // 获取网页的可视区域的高度
+            if (window.screen.height - 234 <= this.$refs.screen.offsetHeight) {
+                // 监听滚动，如果内容大于screen就滚动到最底
+                let scrollMove =
+                    this.$refs.screen.offsetHeight + 336 - window.screen.height;
+                window.scrollTo(0, scrollMove);
+            }
+        },
+        // 让wife随机对话
+        getWifeDialogue(type, money) {
+            // 获取本地文件的语录
+            this.$axios.get("./data/dialogue.json").then(res => {
+
+                // 获取随机对话的索引
+                let randomDialogue = parseInt(
+                    Math.random() * res.data[type].length
+                );
+                console.log(res.data[type[randomDialogue]]);
+                // 添加到对话中去
+                this.Dialogue.push({
+                    content: res.data[type][randomDialogue],
+                    person: "wife"
+                });
+            });
+        },
+        // 添加到vuex里去
+        judgeType(type, money) {
+            this.$store.commit("revise", {
+                name: type,
+                value: money
+            });
+        },
+        // 写入localStorage
+        writeLocalStorage() {
+            window.localStorage.setItem();
+        }
+    },
+
+    // 生命周期函数
+    created() {
+        window.localStorage.setItem("asdklfjlaskd", "hello");
+    },
+    mounted() {},
+    updated() {
+        // 让页面始终再最底部
+        this.windowScrollBottom();
+    }
+};
+</script>
+
+
 <style lang="scss">
 // 会话框(组件的样式)
 $subjectColor: skyblue;
@@ -235,109 +343,3 @@ footer {
     transition: all 1s;
 }
 </style>
-<script>
-export default {
-    data() {
-        return {
-            money: 0,
-            type: "",
-            show: false,
-            showAlert: false,
-            types: [
-                { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
-                { name: { CN: "午餐", EN: "lunch" }, price: 0 },
-                { name: { CN: "晚餐", EN: "supper" }, price: 0 },
-                { name: { CN: "饮料", EN: "beverages" }, price: 0 },
-                { name: { CN: "零食", EN: "snacks" }, price: 0 },
-                { name: { CN: "水果", EN: "fruits" }, price: 0 },
-                { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 }
-            ],
-            Dialogue: [{ content: "你好", person: "wife" }]
-        };
-    },
-    methods: {
-        showSelect() {
-            this.show = !this.show;
-        },
-        getType(type) {
-            this.show = !this.show;
-            this.type = type;
-        },
-        commit(type, money) {
-            // 发送消息告诉对方
-
-            if (!type) {
-                // 如果没有选择类型则弹窗警告
-                this.showAlert = !this.showAlert;
-                let timer = setTimeout(() => {
-                    clearInterval(timer);
-                    this.showAlert = !this.showAlert;
-                }, 1000);
-                return;
-            }
-
-            this.Dialogue.push({ type, content: money, person: "me" });
-
-            this.types.forEach((item, index) => {
-                // 获取随机对话(根据类型)
-                item.name.CN == type
-                    ? this.getWifeDialogue(item.name.EN)
-                    : null;
-                // 判断类型
-                item.name.CN == type
-                    ? this.judgeType(item.name.EN, money)
-                    : null;
-            });
-        },
-        // 让屏幕一直处于最底下
-        windowScrollBottom() {
-            // 获取网页的可视区域的高度
-            if (window.screen.height - 234 <= this.$refs.screen.offsetHeight) {
-                // 监听滚动，如果内容大于screen就滚动到最底
-                let scrollMove =
-                    this.$refs.screen.offsetHeight + 336 - window.screen.height;
-                window.scrollTo(0, scrollMove);
-            }
-        },
-        // 让wife随机对话
-        getWifeDialogue(type, money) {
-            // 获取本地文件的语录
-            this.$axios.get("./data/dialogue.json").then(res => {
-
-                // 获取随机对话的索引
-                let randomDialogue = parseInt(
-                    Math.random() * res.data[type].length
-                );
-                console.log(res.data[type[randomDialogue]]);
-                // 添加到对话中去
-                this.Dialogue.push({
-                    content: res.data[type][randomDialogue],
-                    person: "wife"
-                });
-            });
-        },
-        // 添加到vuex里去
-        judgeType(type, money) {
-            this.$store.commit("revise", {
-                name: type,
-                value: money
-            });
-        },
-        // 写入localStorage
-        writeLocalStorage() {
-            window.localStorage.setItem();
-        }
-    },
-
-    // 生命周期函数
-    created() {
-        window.localStorage.setItem("asdklfjlaskd", "hello");
-    },
-    mounted() {},
-    updated() {
-        // 让页面始终再最底部
-        this.windowScrollBottom();
-    }
-};
-</script>

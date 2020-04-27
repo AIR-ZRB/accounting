@@ -3,11 +3,17 @@
   <!-- 公共样式也在这里写 -->
 
   <div class="container">
+    <!-- 头部分 -->
     <header class="index-header">
-      <img src="../icon/arrow_left.svg" alt="" @click="goBack" />
-
-      <span>。。</span>
-
+      <img
+        src="../icon/arrow_left.svg"
+        alt=""
+        @click="goBack"
+        v-show="tabActive.substring(1) === 'home' ? false : true"
+      />
+      <span class="">{{
+        tabActive.substring(1, 2).toUpperCase() + tabActive.substring(2)
+      }}</span>
       <img src="../icon/setting.svg" class="setting" alt="" />
     </header>
 
@@ -18,33 +24,19 @@
         <img :src="$store.state.wifePicture" />
         <p>{{ this.$store.state.meId }}</p>
         <ul>
-          <li :class="{ tabActive: this.tabActive == '/home' ? true : false }">
-            <img class="icon" src="../icon/list.svg" alt="" />
-            <a href="#/home">Home</a>
-          </li>
-          <li :class="{ tabActive: this.tabActive == '/month' ? true : false }">
-            <img class="icon" src="../icon/time.svg" alt="" />
-            <a href="#/month">Month</a>
-          </li>
-          <li
-            :class="{ tabActive: this.tabActive == '/setting' ? true : false }"
-          >
-            <img class="icon" src="../icon/setting.svg" alt="" />
-            <a href="#/setting">Setting</a>
-          </li>
-          <li :class="{ tabActive: this.tabActive == '/about' ? true : false }">
-            <img class="icon" src="../icon/user.svg" alt="" />
-            <a href="#/about">about</a>
+          <li v-for="(item) in tabsColumn" :key="item.name" :class="{ tabActive: tabActive === '/'+item.name ? true : false }">
+            <img class="icon" :src="item.icon" />
+            <a :href="'#/'+ item.name">{{item.name.substring(0, 1).toUpperCase() + item.name.substring(1)}}</a>
           </li>
         </ul>
 
         <div class="tab-bottom">
           <a href="https://github.com/AIR-ZRB">
-            <img class="icon" src="../icon/social_github.svg" alt="" />
+            <img class="tabs-icon" src="../icon/social_github.svg" alt="" />
           </a>
 
           <a href>
-            <img class="icon" src="../icon/social_sina.svg" alt="" />
+            <img class="tabs-icon" src="../icon/social_sina.svg" alt="" />
           </a>
         </div>
       </div>
@@ -59,6 +51,24 @@ export default {
       wife: this.$store.state.wife,
       tabs: false,
       tabActive: "/home",
+      tabsColumn: [
+        {
+          name: "home",
+          icon: require("../icon/list.svg"),
+        },
+        {
+          name: "month",
+          icon: require("../icon/time.svg"),
+        },
+        {
+          name: "setting",
+          icon: require("../icon/setting.svg"),
+        },
+        {
+          name: "about",
+          icon: require("../icon/user.svg"),
+        },
+      ],
     };
   },
   watch: {
@@ -68,24 +78,18 @@ export default {
     },
   },
   methods: {
-    showBroadside() {
-      this.tabs = !this.tabs;
-    },
+    // 显示和隐藏tabs栏
     nowClick() {
       let _this = this;
+      // tabs是否显示
       document.addEventListener("click", (event) => {
-        // tabs是否显示
-
         let clickNow = event.target.className;
         console.log(clickNow);
-        if (clickNow == "setting" || clickNow == "tabs") {
-          _this.tabs = true;
-        } else {
-          _this.tabs = false;
-        }
+        clickNow == "setting" || clickNow == "tabs"
+          ? (_this.tabs = true)
+          : (_this.tabs = false);
       });
     },
-
     goBack() {
       window.history.go(-1);
     },
@@ -132,6 +136,8 @@ body {
     align-items: center;
     border-bottom: 1px solid #ccc;
     padding: 0 20px;
+    text-align: center;
+    font-size: 18px;
 
     img {
       width: 30px;

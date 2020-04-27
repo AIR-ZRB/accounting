@@ -1,7 +1,5 @@
 <template>
     <div>
-       
-
         <ul>
             <optionsFilesList optionName="更换头像"></optionsFilesList>
             <optionsFilesList optionName="老婆头像"></optionsFilesList>
@@ -32,9 +30,6 @@ export default {
     },
     methods: {
 
-        goBack() {
-            window.history.go(-1);
-        },
         edit() {
             this.editShow = true;
         },
