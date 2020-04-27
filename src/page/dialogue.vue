@@ -1,13 +1,5 @@
 <template>
     <div>
-        <header class="dialogueHeader">
-            <p class="wife-name">{{this.$store.getters.editWife}}</p>
-            <p>
-                <span class="month">2月</span>
-                <span class="money">100收入 / {{this.$store.getters.editExpenditure}}支出</span>
-            </p>
-            <div class="setting"></div>
-        </header>
 
         <div class="center" ref="screen">
             <!-- 路由部分 -->

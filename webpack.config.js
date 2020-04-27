@@ -1,6 +1,7 @@
 const [webpack, path] = [require("webpack"), require("path")];
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
+	mode: "development",
 	entry: path.join(__dirname, "src/index.js"),
 	output: {
 		path: path.join(__dirname, "dist"),
@@ -19,7 +20,7 @@ module.exports = {
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/, use: [
 					{
-						loader: "url-loader?limit=1024",
+						loader: "url-loader?limit=1000",
 						options: {
 							esModule: false,
 							// outputPath: "/",
@@ -29,7 +30,7 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.(woff|svg|eot|ttf)\??.*$/,
+				test: /\.(woff|eot|ttf)\??.*$/,
 				loader: "url-loader?name=fonts/[name].[md5:hash:hex:6].[ext]"
 			}
 		]

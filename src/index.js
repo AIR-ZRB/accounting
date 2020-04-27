@@ -9,7 +9,7 @@ Vue.use(Vuex);
 import axios from "axios";
 Vue.prototype.$axios = axios;
 
-import "./lib/font/iconfont.css";
+
 
 import router from "./router.js";
 import view from "./page/index.vue";
