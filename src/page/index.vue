@@ -19,14 +19,21 @@
 
     <router-view></router-view>
 
+    <!-- tabs列表 -->
     <transition name="broadside">
       <div class="tabs" v-show="tabs">
         <img :src="$store.state.wifePicture" />
         <p>{{ this.$store.state.meId }}</p>
         <ul>
-          <li v-for="(item) in tabsColumn" :key="item.name" :class="{ tabActive: tabActive === '/'+item.name ? true : false }">
+          <li
+            v-for="item in tabsColumn"
+            :key="item.name"
+            :class="{ tabActive: tabActive === '/' + item.name ? true : false }"
+          >
             <img class="icon" :src="item.icon" />
-            <a :href="'#/'+ item.name">{{item.name.substring(0, 1).toUpperCase() + item.name.substring(1)}}</a>
+            <a :href="'#/' + item.name">{{
+              item.name.substring(0, 1).toUpperCase() + item.name.substring(1)
+            }}</a>
           </li>
         </ul>
 
@@ -34,13 +41,17 @@
           <a href="https://github.com/AIR-ZRB">
             <img class="tabs-icon" src="../icon/social_github.svg" alt="" />
           </a>
-
-          <a href>
+          <a href="">
             <img class="tabs-icon" src="../icon/social_sina.svg" alt="" />
           </a>
         </div>
       </div>
     </transition>
+
+
+
+
+    
   </div>
 </template>
 
@@ -125,16 +136,17 @@ body {
   height: 100%;
   overflow-x: hidden;
   // position: relative;
-  padding: 0 0 50px 0;
+  padding: 50px 0;
 
   .index-header {
     width: 100%;
     height: 50px;
-
+    top: 0;
+    position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
+    // border-bottom: 1px solid #ccc;
     padding: 0 20px;
     text-align: center;
     font-size: 18px;

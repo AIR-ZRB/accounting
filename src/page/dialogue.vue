@@ -31,15 +31,19 @@
         <!-- 类型 -->
         <transition>
             <div class="selectType" v-show="show">
-                <!-- <div class="selectType"> -->
-                <ul>
-                    <li
-                        class="typesCircle"
-                        v-for="item in types"
-                        :key="item.name.CN"
-                        @click="getType(item.name.CN)"
-                    >{{item.name.CN}}</li>
-                </ul>
+                
+                    <ul>
+                        <li
+                            class="typesCircle"
+                            v-for="item in types"
+                            :key="item.name.CN"
+                            @click="getType(item.name.CN)"
+                        >
+                            <img :src="require(`../icon/${item.name.EN}.svg`)" alt="">
+                            <p>{{item.name.CN}}</p>
+                        </li>
+                    </ul>
+                
             </div>
         </transition>
     </div>
@@ -60,7 +64,20 @@ export default {
                 { name: { CN: "零食", EN: "snacks" }, price: 0 },
                 { name: { CN: "水果", EN: "fruits" }, price: 0 },
                 { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 }
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
+                { name: { CN: "其他", EN: "rests" }, price: 0 },
             ],
             Dialogue: [{ content: "你好", person: "wife" }]
         };
@@ -68,6 +85,7 @@ export default {
     methods: {
         showSelect() {
             this.show = !this.show;
+            console.log(this.show);
         },
         getType(type) {
             this.show = !this.show;
@@ -114,11 +132,15 @@ export default {
             // 获取本地文件的语录
             this.$axios.get("./data/dialogue.json").then(res => {
 
+                // console.log(res.data[type])
+
+
+
                 // 获取随机对话的索引
                 let randomDialogue = parseInt(
                     Math.random() * res.data[type].length
                 );
-                console.log(res.data[type[randomDialogue]]);
+                // console.log(res.data[type[randomDialogue]]);
                 // 添加到对话中去
                 this.Dialogue.push({
                     content: res.data[type][randomDialogue],
@@ -279,40 +301,52 @@ footer {
     }
 }
 
-.selectType {
-    width: 100%;
-    height: 150px;
-    background: purple;
-    position: absolute;
-    bottom: 0;
-    padding: 10px 20px;
-    transform: translateY(0px);
-    border-radius: 10px 10px 0 0;
-    opacity: 0.5;
 
-    ul {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: space-around;
-        align-content: space-around;
-        flex-wrap: wrap;
+   
+    .selectType {
+        width: 90%;
+        height: 300px;
+        padding: 20px;
+        transform: translateY(0px);
+        border-radius: 10px;
+        opacity: 0.5;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+         overflow: scroll;
 
-        .typesCircle {
-            list-style: none;
+        ul {
+            width: 100%;
+            height: 100%;
+           
 
-            width: 15%;
-            margin: 0 30px 0 0;
-            // margin: 10px 10px 10px 10px;
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
-            border-radius: 50%;
-            background: skyblue;
-            float: left;
+
+            .typesCircle {
+                list-style: none;
+                height: 80px;
+                width: 25%;
+               
+                text-align: center;
+                border-radius: 50%;
+                // background: skyblue;
+                float: left;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+                p {
+                    margin: 0;
+                } 
+               
+            }
         }
     }
-}
+
+
 
 .alert {
     width: 60%;
