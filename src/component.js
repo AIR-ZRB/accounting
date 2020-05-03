@@ -20,9 +20,7 @@ Vue.component("alertComponent", {
 // 2. 添加动画(无头绪)
 let conversationTemplate = `
     <!-- 会话组件 -->
-    <transition 
-        @enter="conEnter",
-    >
+    <transition >
         <div :class="[pople,conversation]">
             <img :src="picture" alt="">
             <p class="dialogue">
@@ -31,7 +29,7 @@ let conversationTemplate = `
             </p>
         </div>
     </transition>
-    `;
+`;
 
 Vue.component("conversation", {
   template: conversationTemplate,
@@ -55,11 +53,7 @@ Vue.component("conversation", {
       } else {
         this.pople = this.person;
       }
-    },
-    conEnter(el) {
-      el.style.transition = "all 1s";
-      el.style.transform = "translateY(10px)";
-    },
+    }
   },
   created() {
     this.who();

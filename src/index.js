@@ -55,10 +55,7 @@ const store = new Vuex.Store({
         parseInt(state.supper)
       );
     },
-  },
-  created() {
-    console.log(11);
-  },
+  }
 });
 
 // vm实例

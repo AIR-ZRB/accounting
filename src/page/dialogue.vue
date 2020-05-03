@@ -1,17 +1,18 @@
 <template>
     <div>
-
         <div class="center" ref="screen">
             <!-- 路由部分 -->
 
             <!-- 对话组件 -->
-            <conversation
-                :person="item.person"
-                :dialogue="item.content"
-                :type="item.type"
-                :key="item.money"
-                v-for="item in this.Dialogue"
-            ></conversation>
+           
+                <conversation
+                    :key="item.money"
+                    :person="item.person"
+                    :dialogue="item.content"
+                    :type="item.type"
+                    v-for="item in this.Dialogue"
+                ></conversation>
+           
         </div>
 
         <!-- 发消息组件 -->
@@ -29,9 +30,8 @@
         </transition>
 
         <!-- 类型 -->
-        <transition>
+        <transition name="select">
             <div class="selectType" v-show="show">
-                
                     <ul>
                         <li
                             class="typesCircle"
@@ -64,28 +64,18 @@ export default {
                 { name: { CN: "零食", EN: "snacks" }, price: 0 },
                 { name: { CN: "水果", EN: "fruits" }, price: 0 },
                 { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
+                { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
                 { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
+            
             ],
             Dialogue: [{ content: "你好", person: "wife" }]
         };
     },
     methods: {
         showSelect() {
+            console.log("选择框出现");
             this.show = !this.show;
-            console.log(this.show);
+            
         },
         getType(type) {
             this.show = !this.show;
@@ -160,12 +150,6 @@ export default {
             window.localStorage.setItem();
         }
     },
-
-    // 生命周期函数
-    created() {
-        window.localStorage.setItem("asdklfjlaskd", "hello");
-    },
-    mounted() {},
     updated() {
         // 让页面始终再最底部
         this.windowScrollBottom();
@@ -316,7 +300,7 @@ footer {
         right: 0;
         left: 0;
         margin: auto;
-         overflow: scroll;
+        overflow-y: scroll;
 
         ul {
             width: 100%;
@@ -376,4 +360,31 @@ footer {
 .alert-leave-active {
     transition: all 1s;
 }
+
+
+
+.select-enter,
+.select-leave-to {
+    transform: translateY(1000px);
+}
+
+.select-enter-active,
+.select-leave-active {
+    transition: all .3s;
+}
+
+
+.list-enter,
+.list-leave-to {
+    transform: translateY(1000px);
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all .3s;
+}
+
+
+
+
 </style>
