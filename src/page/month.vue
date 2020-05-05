@@ -14,7 +14,10 @@
           <!-- 天數 -->
           <li
             v-for="(item, index) in this.MonthDays"
-            :class="[{active: index === today - 1 ? true : false },{clickActive: index === clickToday ? true : false}]"
+            :class="[
+              { active: index === today - 1 ? true : false },
+              { clickActive: index === clickToday ? true : false },
+            ]"
             :key="item"
             @click="monthActive(index)"
           >
@@ -30,9 +33,7 @@ export default {
   data() {
     return {
       sevenWord: ["一", "二", "三", "四", "五", "六", "七"],
-      // today: 1,
-      today: [],
-      monthDay: 1,
+      today: 1,
       month: 1,
       MonthFirstDayWeek: 1,
       MonthDays: 1,
@@ -48,7 +49,6 @@ export default {
 
       // 获取今天几号1~31
       this.today = date.getDate();
-    
 
       // 获得月0~11
       this.month = date.getMonth();
@@ -65,13 +65,12 @@ export default {
     },
     monthActive(index) {
       console.log(index);
+      // 点击今天会变蓝，且显示今天的数据
       this.clickToday = index;
-      
     },
   },
   created() {
     this.getMonth();
-    
   },
 };
 </script>
@@ -86,7 +85,6 @@ $subColor: #f0f1f3;
   .monthHeaderPage {
     width: 100%;
     height: 50px;
-    // background: red;
     top: 0;
     left: 0;
     position: relative;

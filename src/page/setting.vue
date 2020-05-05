@@ -41,11 +41,7 @@ export default {
         editCancel() {
             this.editShow = false;
         }
-    },
-    created() {
-    
     }
- 
 };
 </script>
 

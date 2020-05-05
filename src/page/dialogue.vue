@@ -4,46 +4,54 @@
             <!-- 路由部分 -->
 
             <!-- 对话组件 -->
-           
-                <conversation
-                    :key="item.money"
-                    :person="item.person"
-                    :dialogue="item.content"
-                    :type="item.type"
-                    v-for="item in this.Dialogue"
-                ></conversation>
-           
+
+            <conversation
+                :key="item.money"
+                :person="item.person"
+                :dialogue="item.content"
+                :type="item.type"
+                v-for="item in this.Dialogue"
+            ></conversation>
         </div>
 
         <!-- 发消息组件 -->
         <footer>
             <span @click="showSelect()">支出</span>
             <div class="frame">
-                <span class="type">{{type}}</span>
-                <input type="number" v-model="money" @keyup.enter="commit(type,money)" />
+                <span class="type">{{ type }}</span>
+                <input
+                    type="number"
+                    v-model="money"
+                    @keyup.enter="commit(type, money)"
+                />
             </div>
         </footer>
 
         <!-- 弹出警告框 -->
         <transition name="alert">
-            <alertComponent information="没有选择类型" v-if="showAlert"></alertComponent>
+            <alertComponent
+                information="没有选择类型"
+                v-if="showAlert"
+            ></alertComponent>
         </transition>
 
         <!-- 类型 -->
         <transition name="select">
             <div class="selectType" v-show="show">
-                    <ul>
-                        <li
-                            class="typesCircle"
-                            v-for="item in types"
-                            :key="item.name.CN"
-                            @click="getType(item.name.CN)"
-                        >
-                            <img :src="require(`../icon/${item.name.EN}.svg`)" alt="">
-                            <p>{{item.name.CN}}</p>
-                        </li>
-                    </ul>
-                
+                <ul>
+                    <li
+                        class="typesCircle"
+                        v-for="item in types"
+                        :key="item.name.CN"
+                        @click="getType(item.name.CN)"
+                    >
+                        <img
+                            :src="require(`../icon/${item.name.EN}.svg`)"
+                            alt=""
+                        />
+                        <p>{{ item.name.CN }}</p>
+                    </li>
+                </ul>
             </div>
         </transition>
     </div>
@@ -66,16 +74,14 @@ export default {
                 { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
                 { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
                 { name: { CN: "其他", EN: "rests" }, price: 0 },
-            
             ],
-            Dialogue: [{ content: "你好", person: "wife" }]
+            Dialogue: [{ content: "你好", person: "wife" }],
         };
     },
     methods: {
         showSelect() {
             console.log("选择框出现");
             this.show = !this.show;
-            
         },
         getType(type) {
             this.show = !this.show;
@@ -120,11 +126,8 @@ export default {
         // 让wife随机对话
         getWifeDialogue(type, money) {
             // 获取本地文件的语录
-            this.$axios.get("./data/dialogue.json").then(res => {
-
+            this.$axios.get("./data/dialogue.json").then((res) => {
                 // console.log(res.data[type])
-
-
 
                 // 获取随机对话的索引
                 let randomDialogue = parseInt(
@@ -134,29 +137,37 @@ export default {
                 // 添加到对话中去
                 this.Dialogue.push({
                     content: res.data[type][randomDialogue],
-                    person: "wife"
+                    person: "wife",
                 });
             });
+
+            this.setStorage();
         },
         // 添加到vuex里去
         judgeType(type, money) {
             this.$store.commit("revise", {
                 name: type,
-                value: money
+                value: money,
             });
         },
         // 写入localStorage
-        writeLocalStorage() {
-            window.localStorage.setItem();
-        }
+        setStorage() {
+            localStorage.setItem("azureSky", JSON.stringify(this.Dialogue));
+        },
+        getStorage() {
+            this.Dialogue = JSON.parse(localStorage.getItem("azureSky")) || [];
+            console.log(this.Dialogue)
+        },
+    },
+    created(){
+        this.getStorage()
     },
     updated() {
         // 让页面始终再最底部
         this.windowScrollBottom();
-    }
+    },
 };
 </script>
-
 
 <style lang="scss">
 // 会话框(组件的样式)
@@ -285,52 +296,45 @@ footer {
     }
 }
 
+.selectType {
+    width: 90%;
+    height: 300px;
+    padding: 20px;
+    transform: translateY(0px);
+    border-radius: 10px;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    overflow-y: scroll;
 
-   
-    .selectType {
-        width: 90%;
-        height: 300px;
-        padding: 20px;
-        transform: translateY(0px);
-        border-radius: 10px;
-        opacity: 0.5;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        margin: auto;
-        overflow-y: scroll;
+    ul {
+        width: 100%;
+        height: 100%;
 
-        ul {
-            width: 100%;
-            height: 100%;
-           
+        .typesCircle {
+            list-style: none;
+            height: 80px;
+            width: 25%;
 
+            text-align: center;
+            border-radius: 50%;
+            // background: skyblue;
+            float: left;
 
-            .typesCircle {
-                list-style: none;
-                height: 80px;
-                width: 25%;
-               
-                text-align: center;
-                border-radius: 50%;
-                // background: skyblue;
-                float: left;
-
-                img {
-                    width: 40px;
-                    height: 40px;
-                }
-                p {
-                    margin: 0;
-                } 
-               
+            img {
+                width: 40px;
+                height: 40px;
+            }
+            p {
+                margin: 0;
             }
         }
     }
-
-
+}
 
 .alert {
     width: 60%;
@@ -361,8 +365,6 @@ footer {
     transition: all 1s;
 }
 
-
-
 .select-enter,
 .select-leave-to {
     transform: translateY(1000px);
@@ -370,9 +372,8 @@ footer {
 
 .select-enter-active,
 .select-leave-active {
-    transition: all .3s;
+    transition: all 0.3s;
 }
-
 
 .list-enter,
 .list-leave-to {
@@ -381,10 +382,6 @@ footer {
 
 .list-enter-active,
 .list-leave-active {
-    transition: all .3s;
+    transition: all 0.3s;
 }
-
-
-
-
 </style>
