@@ -21,6 +21,9 @@
 </template>
 
 <script>
+
+import { setStorage, getStorage, setStorageJSON } from "../store.js";
+
 export default {
     data() {
         return {
@@ -29,7 +32,6 @@ export default {
         };
     },
     methods: {
-
         edit() {
             this.editShow = true;
         },
@@ -41,6 +43,9 @@ export default {
         editCancel() {
             this.editShow = false;
         }
+    },
+    created(){
+
     }
 };
 </script>

@@ -1,5 +1,8 @@
 
+import Vue from "vue/dist/vue.js";
 import VueRouter from "vue-router";
+Vue.use(VueRouter);
+
 
 import dialogue from "./page/dialogue.vue";
 import month from "./page/month.vue";

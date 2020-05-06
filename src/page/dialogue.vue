@@ -16,13 +16,13 @@
 
         <!-- 发消息组件 -->
         <footer>
-            <span @click="showSelect()">支出</span>
+            <span @click="() => (this.show = !this.show)">支出</span>
             <div class="frame">
                 <span class="type">{{ type }}</span>
                 <input
                     type="number"
                     v-model="money"
-                    @keyup.enter="commit(type, money)"
+                    @keyup.enter="commit(type, typeEN, money)"
                 />
             </div>
         </footer>
@@ -43,7 +43,7 @@
                         class="typesCircle"
                         v-for="item in types"
                         :key="item.name.CN"
-                        @click="getType(item.name.CN)"
+                        @click="getType(item.name.CN,item.name.EN)"
                     >
                         <img
                             :src="require(`../icon/${item.name.EN}.svg`)"
@@ -57,11 +57,14 @@
     </div>
 </template>
 <script>
+import { setStorage, getStorage } from "../store.js";
+
 export default {
     data() {
         return {
             money: 0,
             type: "",
+            typeEN: "",
             show: false,
             showAlert: false,
             types: [
@@ -75,19 +78,16 @@ export default {
                 { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
                 { name: { CN: "其他", EN: "rests" }, price: 0 },
             ],
-            Dialogue: [{ content: "你好", person: "wife" }],
+            Dialogue: [],
         };
     },
     methods: {
-        showSelect() {
-            console.log("选择框出现");
-            this.show = !this.show;
-        },
-        getType(type) {
+        getType(type,typeEN) {
             this.show = !this.show;
             this.type = type;
+            this.typeEN = typeEN;
         },
-        commit(type, money) {
+        commit(type, typeEN ,money) {
             // 发送消息告诉对方
 
             if (!type) {
@@ -100,7 +100,16 @@ export default {
                 return;
             }
 
-            this.Dialogue.push({ type, content: money, person: "me" });
+            let date = new Date();
+
+            this.Dialogue.push({
+                type,
+                typeEN,
+                content: money,
+                person: "me",
+                month: date.getMonth()+1,
+                today: date.getDate(),
+            });
 
             this.types.forEach((item, index) => {
                 // 获取随机对话(根据类型)
@@ -123,25 +132,23 @@ export default {
                 window.scrollTo(0, scrollMove);
             }
         },
+
         // 让wife随机对话
         getWifeDialogue(type, money) {
             // 获取本地文件的语录
             this.$axios.get("./data/dialogue.json").then((res) => {
-                // console.log(res.data[type])
-
                 // 获取随机对话的索引
+
                 let randomDialogue = parseInt(
-                    Math.random() * res.data[type].length
+                    Math.random() * res.data["breakfast"].length
                 );
-                // console.log(res.data[type[randomDialogue]]);
+
                 // 添加到对话中去
                 this.Dialogue.push({
-                    content: res.data[type][randomDialogue],
-                    person: "wife",
+                    content: res.data["breakfast"][randomDialogue],
+                    person: "wife"
                 });
             });
-
-            this.setStorage();
         },
         // 添加到vuex里去
         judgeType(type, money) {
@@ -150,21 +157,18 @@ export default {
                 value: money,
             });
         },
-        // 写入localStorage
-        setStorage() {
-            localStorage.setItem("azureSky", JSON.stringify(this.Dialogue));
-        },
-        getStorage() {
-            this.Dialogue = JSON.parse(localStorage.getItem("azureSky")) || [];
-            console.log(this.Dialogue)
-        },
     },
-    created(){
-        this.getStorage()
+    created() {
+        this.Dialogue = getStorage("azureSky") || [
+            { content: "你好", person: "wife"},
+        ];
     },
     updated() {
         // 让页面始终再最底部
         this.windowScrollBottom();
+
+        // 写入localStorage对象里
+        setStorage("azureSky", this.Dialogue);
     },
 };
 </script>
