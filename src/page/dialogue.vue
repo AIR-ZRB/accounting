@@ -113,13 +113,9 @@ export default {
 
             this.types.forEach((item, index) => {
                 // 获取随机对话(根据类型)
-                item.name.CN == type
-                    ? this.getWifeDialogue(item.name.EN)
-                    : null;
+                item.name.CN == type && this.getWifeDialogue(item.name.EN);
                 // 判断类型
-                item.name.CN == type
-                    ? this.judgeType(item.name.EN, money)
-                    : null;
+                item.name.CN == type && this.judgeType(item.name.EN, money);
             });
         },
         // 让屏幕一直处于最底下
@@ -142,6 +138,7 @@ export default {
                 let randomDialogue = parseInt(
                     Math.random() * res.data["breakfast"].length
                 );
+
 
                 // 添加到对话中去
                 this.Dialogue.push({

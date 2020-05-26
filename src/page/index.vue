@@ -91,20 +91,20 @@ export default {
     watch: {
         $route(to) {
             this.tabActive = to.path;
+            console.log(this.tabActive)
             // console.log(to.path); //当前路由
         },
     },
     methods: {
         // 显示和隐藏tabs栏
         nowClick() {
-            let _this = this;
             // tabs是否显示
             document.addEventListener("click", (event) => {
                 let clickNow = event.target.className;
                 console.log("全局点击事件的Class" + clickNow);
                 clickNow == "setting" || clickNow == "tabs"
-                    ? (_this.tabs = true)
-                    : (_this.tabs = false);
+                    ? (this.tabs = true)
+                    : (this.tabs = false);
             });
         },
         goBack() {
@@ -112,6 +112,13 @@ export default {
         },
     },
     created() {
+        // console.log(this.$route.fullPath);
+        /**
+         * 1. 一开始根据url重定向
+         * 2. 注册全局点击事件
+         */
+        this.$router.push({path: this.$route.fullPath})   
+        this.tabActive = this.$route.fullPath
         this.nowClick();
     },
 };
