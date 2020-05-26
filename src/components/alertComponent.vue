@@ -1,7 +1,8 @@
 <template>
     <transition name="alert">
         <div class="alert">
-            <span> {{ this.information }} </span>
+            <img src="../icon/warn.svg" alt="">
+            <p> {{ this.information }} </p>
         </div>
     </transition>
 </template>
@@ -20,7 +21,7 @@ export default {
 <style lang="scss">
 .alert {
     width: 50%;
-    height: 60px;
+    height: 200px;
     text-align: center;
     line-height: 20px;
     border-radius: 10px;
@@ -33,8 +34,16 @@ export default {
     background: #000;
     color: #fff;
     padding: 0 20px;
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
+    display: grid;
+    grid-template-rows: 70% 15% 15%;
+    place-items: center;
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 .alert-enter,

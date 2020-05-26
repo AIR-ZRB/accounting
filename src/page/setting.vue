@@ -3,24 +3,33 @@
         <ul>
             <optionsList
                 optionName="我的名字"
-                :defaultValue="this.$store.state.meId"
+                :defaultValue="this.$store.state.master"
+                @click.native="() => edit('master')"
             ></optionsList>
+
             <optionsList
                 optionName="老婆名字"
                 :defaultValue="this.$store.state.wife"
-                @click.native="edit"
+                @click.native="() => edit('wife')"
             ></optionsList>
 
-            <optionsFileList optionName="更换头像"></optionsFileList>
-            <optionsFileList optionName="老婆头像"></optionsFileList>
+            <optionsFileList
+                optionName="更换头像"
+                :defaultValue="this.$store.state.masterPicture"
+            ></optionsFileList>
+
+            <optionsFileList
+                optionName="老婆头像"
+                :defaultValue="this.$store.state.wifePicture"
+            ></optionsFileList>
         </ul>
 
-        <div class="editBg" v-if="editShow">
+        <div class="editBg" v-if="editShow" @click="editBox">
             <div class="edit">
-                <input type="text" v-model="wife" />
+                <input type="text" v-model="inputValue" v-focus />
                 <p>
-                    <span class="sure" @click="editWifeName">确定</span>
-                    <span class="cancel" @click="editCancel">取消</span>
+                    <span class="sure">确定</span>
+                    <span class="cancel">取消</span>
                 </p>
             </div>
         </div>
@@ -38,23 +47,51 @@ export default {
     data() {
         return {
             editShow: false,
+            inputValue: "",
+            currentType: "",
         };
+    },
+    directives: {
+        focus: {
+            inserted(el) {
+                el.focus();
+            },
+        },
     },
     components: {
         optionsList,
-        optionsFileList
+        optionsFileList,
     },
     methods: {
-        edit() {
+        edit(type) {
             this.editShow = true;
+            this.currentType = type;
         },
-        editWifeName() {
+        editValue() {
             // 调用vuex修改内容
-            this.$store.commit("revise", { name: "wife", value: this.wife });
+            this.$store.commit("revise", {
+                name: this.currentType,
+                value: this.inputValue,
+            });
+            this.inputValue = "";
             this.editCancel();
         },
         editCancel() {
             this.editShow = false;
+        },
+        editBox(event) {
+            // 事件委托
+            switch (event.target.className) {
+                case "editBg":
+                    this.editCancel();
+                    break;
+                case "sure":
+                    this.editValue();
+                    break;
+                case "cancel":
+                    this.editCancel();
+                    break;
+            }
         },
     },
     created() {},
@@ -62,8 +99,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 .editBg {
     width: 100%;
     height: 100%;
@@ -74,7 +109,7 @@ export default {
 
     .edit {
         width: 80%;
-        height: 100px;
+        height: 150px;
         background: #fff;
         position: absolute;
         left: 0;
@@ -82,13 +117,14 @@ export default {
         right: 0;
         bottom: 0;
         margin: auto;
+        border-radius: 5px;
 
         input {
             position: absolute;
             width: 90%;
             height: 30%;
             top: 0;
-            bottom: 0;
+            bottom: 10px;
             left: 0;
             right: 0;
             margin: auto;
@@ -100,7 +136,7 @@ export default {
         p {
             position: absolute;
             right: 10px;
-            bottom: 5px;
+            bottom: 15px;
             color: skyblue;
 
             span {

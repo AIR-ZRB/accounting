@@ -21,8 +21,8 @@
         <!-- tabs列表 -->
         <transition name="broadside">
             <div class="tabs" v-show="tabs">
-                <img :src="$store.state.wifePicture" />
-                <p>{{ this.$store.state.meId }}</p>
+                <img :src="$store.state.masterPicture" />
+                <p>{{ this.$store.state.master }}</p>
                 <ul>
                     <li
                         v-for="item in tabsColumn"
@@ -39,23 +39,6 @@
                         }}</a>
                     </li>
                 </ul>
-
-                <div class="tab-bottom">
-                    <a href="https://github.com/AIR-ZRB">
-                        <img
-                            class="tabs-icon"
-                            src="../icon/social_github.svg"
-                            alt=""
-                        />
-                    </a>
-                    <a href="">
-                        <img
-                            class="tabs-icon"
-                            src="../icon/social_sina.svg"
-                            alt=""
-                        />
-                    </a>
-                </div>
             </div>
         </transition>
     </div>
@@ -229,25 +212,7 @@ body {
             }
         }
 
-        .tab-bottom {
-            width: 100%;
-            height: 50px;
-            position: absolute;
-            bottom: 10px;
-            display: flex;
-            justify-content: center;
-            a {
-                display: block;
-                width: 40px;
-                height: 40px;
-                margin-right: 20px;
-            }
-            .tabs-icon {
-                width: 100%;
-                height: 100%;
-                position: static;
-            }
-        }
+      
     }
 
     .broadside-enter,

@@ -9,7 +9,7 @@
         />
         <span>{{ this.optionName }}</span>
         <span class="right">
-            <img src="" id="img" />
+            <img :src="defaultValue" id="img" />
         </span>
         <div class="editImage" v-show="isShowEditImg"></div>
     </li>
@@ -26,6 +26,10 @@ export default {
         optionName: {
             type: String,
             default: "设置选项",
+        },
+        defaultValue: {
+            type: String,
+            default: ""
         }
     },
     methods: {

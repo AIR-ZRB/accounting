@@ -12,13 +12,14 @@
 </template>
 
 <script>
+import "../store/store.js"
 export default {
     props: ["person", "dialogue", "type"],
     data() {
         return {
             pople: "wife",
             conversation: "conversation",
-            picture: require("../images/portrait.png"),
+            picture: require("../images/wifePortrait.jpg"),
         };
     },
     methods: {
@@ -27,10 +28,12 @@ export default {
         },
         who() {
             // 判断是谁该输入
-            if (this.person == "wife") {
+            if (this.person === "wife") {
                 this.pople = this.person;
+                this.picture = this.$store.state.wifePicture;
             } else {
                 this.pople = this.person;
+                this.picture = this.$store.state.masterPicture;
             }
         },
     },

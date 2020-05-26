@@ -141,6 +141,7 @@ $subColor: #f0f1f3;
         height: 30px;
         font-size: 18px;
         line-height: 30px;
+        border-radius: 5px;
     }
 
     .monthHeaderPage {

@@ -28,7 +28,7 @@
         <!-- 弹出警告框 -->
 
         <alertComponent
-            information="没有选择类型,请按支出来选择类型"
+            information="请点击支出选择消费类型"
             v-if="showAlert"
         ></alertComponent>
 
