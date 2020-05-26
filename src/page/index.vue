@@ -112,13 +112,13 @@ export default {
         },
     },
     created() {
-        // console.log(this.$route.fullPath);
         /**
          * 1. 一开始根据url重定向
          * 2. 注册全局点击事件
          */
         this.$router.push({path: this.$route.fullPath})   
         this.tabActive = this.$route.fullPath
+
         this.nowClick();
     },
 };

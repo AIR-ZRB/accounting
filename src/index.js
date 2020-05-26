@@ -6,9 +6,9 @@ Vue.prototype.$axios = axios;
 
 
 // 路由模块
-import router from "./router.js";
+import router from "./router/router.js";
 // 状态管理模块
-import store from "./store.js";
+import store from "./store/store.js";
 
 
 // 主页

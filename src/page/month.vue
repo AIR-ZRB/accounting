@@ -50,7 +50,7 @@
     </div>
 </template>
 <script>
-import { setStorage, getStorage } from "../store.js";
+import { setStorage, getStorage } from "../store/store.js";
 
 export default {
     data() {

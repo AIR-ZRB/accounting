@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         wife: "星野日向", // 老婆名字
-        wifePicture: require("./images/portrait.png"), //老婆头像
+        wifePicture: require("../images/portrait.png"), //老婆头像
         meId: "青空",
         allExpense: 0,          // 总共花销
         todayExpense: 0,        // 今日花销

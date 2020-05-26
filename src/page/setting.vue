@@ -22,7 +22,7 @@
 
 <script>
 
-import { setStorage, getStorage, setStorageJSON } from "../store.js";
+import { setStorage, getStorage, setStorageJSON } from "../store/store.js";
 
 export default {
     data() {
