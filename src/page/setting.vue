@@ -1,9 +1,12 @@
 <template>
     <div>
         <ul>
+            <optionsList optionName="我的名字" :defaultValue="this.$store.state.meId"></optionsList>   
+            <optionsList optionName="老婆名字" :defaultValue="this.$store.state.wife" @click.native="edit"></optionsList>
+
             <optionsFilesList optionName="更换头像"></optionsFilesList>
             <optionsFilesList optionName="老婆头像"></optionsFilesList>
-            <optionsList optionName="老婆名字" :default="this.wife" @click.native="edit"></optionsList>
+            
         </ul>
 
         <div class="editBg" v-if="editShow">
@@ -23,13 +26,17 @@
 <script>
 
 import { setStorage, getStorage, setStorageJSON } from "../store/store.js";
+import optionsList from "../components/optionsList.vue"
+
 
 export default {
     data() {
         return {
-            wife: this.$store.state.wife,
             editShow: false
         };
+    },
+    components: {
+        optionsList
     },
     methods: {
         edit() {

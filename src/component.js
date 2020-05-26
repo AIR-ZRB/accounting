@@ -61,17 +61,6 @@ Vue.component("conversation", {
   },
 });
 
-// 修改数据的组件
-let optionsList = `
-	<li class="optionList">
-		<span>{{this.optionName}}</span>
-		<span class="right">{{this.default}}</span>
-	</li>
-`;
-Vue.component("optionsList", {
-  template: optionsList,
-  props: ["optionName", "default"],
-});
 
 // 读取文件的组件
 let optionsFilesList = `
@@ -88,6 +77,7 @@ let optionsFilesList = `
     
 `;
 
+// 文件上传组件
 Vue.component("optionsFilesList", {
   template: optionsFilesList,
   data() {
