@@ -2,14 +2,12 @@
     <div>
         <div class="center" ref="screen">
             <!-- 路由部分 -->
-
             <!-- 对话组件 -->
-
             <conversation
                 :key="item.money"
                 :person="item.person"
                 :dialogue="item.content"
-                :type="item.type"
+                :type="item.typeCN"
                 v-for="item in this.Dialogue"
             ></conversation>
         </div>
@@ -18,83 +16,59 @@
         <footer>
             <span @click="() => (this.show = !this.show)">支出</span>
             <div class="frame">
-                <span class="type">{{ type }}</span>
+                <span class="type">{{ typeCN }}</span>
                 <input
                     type="number"
                     v-model="money"
-                    @keyup.enter="commit(type, typeEN, money)"
+                    @keyup.enter="()=>commit(typeCN, typeEN, money)"
                 />
             </div>
         </footer>
 
         <!-- 弹出警告框 -->
-        
-            <alertComponent
-                information="没有选择类型,请按支出来选择类型"
-                v-if="showAlert"
-            ></alertComponent>
-      
 
-        <!-- 类型 -->
-        <transition name="select">
-            <div class="selectType" v-show="show">
-                <ul>
-                    <li
-                        class="typesCircle"
-                        v-for="item in types"
-                        :key="item.name.CN"
-                        @click="getType(item.name.CN,item.name.EN)"
-                    >
-                        <img
-                            :src="require(`../icon/${item.name.EN}.svg`)"
-                            alt=""
-                        />
-                        <p>{{ item.name.CN }}</p>
-                    </li>
-                </ul>
-            </div>
-        </transition>
+        <alertComponent
+            information="没有选择类型,请按支出来选择类型"
+            v-if="showAlert"
+        ></alertComponent>
+
+        <selectType :show="show" @getType="getType"></selectType>
     </div>
 </template>
 <script>
 import { setStorage, getStorage } from "../store/store.js";
-import { alertComponent,conversation } from "../components/exportComponents.js";
+import {
+    alertComponent,
+    conversation,
+    selectType,
+} from "../components/exportComponents.js";
+
 export default {
     data() {
         return {
             money: 0,
-            type: "",
+            typeCN: "",
             typeEN: "",
             show: false,
             showAlert: false,
-            types: [
-                { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
-                { name: { CN: "午餐", EN: "lunch" }, price: 0 },
-                { name: { CN: "晚餐", EN: "supper" }, price: 0 },
-                { name: { CN: "饮料", EN: "beverages" }, price: 0 },
-                { name: { CN: "零食", EN: "snacks" }, price: 0 },
-                { name: { CN: "水果", EN: "fruits" }, price: 0 },
-                { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
-                { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
-            ],
             Dialogue: [],
         };
     },
     components: {
         alertComponent,
-        conversation
+        conversation,
+        selectType,
     },
     methods: {
-        getType(type,typeEN) {
+        getType(typeCN, typeEN) {
             this.show = !this.show;
-            this.type = type;
+            this.typeCN = typeCN;
             this.typeEN = typeEN;
         },
-        commit(type, typeEN ,money) {
+        commit(typeCN, typeEN, money) {
             // 发送消息告诉对方
 
-            if (!type) {
+            if (!typeCN) {
                 // 如果没有选择类型则弹窗警告
                 this.showAlert = !this.showAlert;
                 let timer = setTimeout(() => {
@@ -107,30 +81,18 @@ export default {
             let date = new Date();
 
             this.Dialogue.push({
-                type,
+                typeCN,
                 typeEN,
                 content: money,
                 person: "me",
-                month: date.getMonth()+1,
+                month: date.getMonth() + 1,
                 today: date.getDate(),
             });
 
-            this.types.forEach((item, index) => {
-                // 获取随机对话(根据类型)
-                item.name.CN == type && this.getWifeDialogue(item.name.EN);
-                // 判断类型
-                item.name.CN == type && this.judgeType(item.name.EN, money);
-            });
-        },
-        // 让屏幕一直处于最底下
-        windowScrollBottom() {
-            // 获取网页的可视区域的高度
-            if (window.screen.height - 234 <= this.$refs.screen.offsetHeight) {
-                // 监听滚动，如果内容大于screen就滚动到最底
-                let scrollMove =
-                    this.$refs.screen.offsetHeight + 336 - window.screen.height;
-                window.scrollTo(0, scrollMove);
-            }
+            // 获取随机对话(根据类型)
+            this.getWifeDialogue(this.typeEN);
+            // 判断类型
+            this.judgeType(this.typeEN, money);
         },
 
         // 让wife随机对话
@@ -143,11 +105,10 @@ export default {
                     Math.random() * res.data["breakfast"].length
                 );
 
-
                 // 添加到对话中去
                 this.Dialogue.push({
                     content: res.data["breakfast"][randomDialogue],
-                    person: "wife"
+                    person: "wife",
                 });
             });
         },
@@ -158,16 +119,26 @@ export default {
                 value: money,
             });
         },
+
+        // 让屏幕一直处于最底下
+        windowScrollBottom() {
+            // 获取网页的可视区域的高度
+            if (window.screen.height - 234 <= this.$refs.screen.offsetHeight) {
+                // 监听滚动，如果内容大于screen就滚动到最底
+                let scrollMove =
+                    this.$refs.screen.offsetHeight + 336 - window.screen.height;
+                window.scrollTo(0, scrollMove);
+            }
+        },
     },
     created() {
         this.Dialogue = getStorage("azureSky") || [
-            { content: "你好", person: "wife"},
+            { content: "你好", person: "wife" },
         ];
     },
     updated() {
         // 让页面始终再最底部
         this.windowScrollBottom();
-
         // 写入localStorage对象里
         setStorage("azureSky", this.Dialogue);
     },
@@ -255,58 +226,6 @@ footer {
             float: right;
         }
     }
-}
-
-.selectType {
-    width: 90%;
-    height: 300px;
-    padding: 20px;
-    transform: translateY(0px);
-    border-radius: 10px;
-    opacity: 0.5;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto;
-    overflow-y: scroll;
-
-    ul {
-        width: 100%;
-        height: 100%;
-
-        .typesCircle {
-            list-style: none;
-            height: 80px;
-            width: 25%;
-
-            text-align: center;
-            border-radius: 50%;
-            // background: skyblue;
-            float: left;
-
-            img {
-                width: 40px;
-                height: 40px;
-            }
-            p {
-                margin: 0;
-            }
-        }
-    }
-}
-
-
-
-.select-enter,
-.select-leave-to {
-    transform: translateY(1000px);
-}
-
-.select-enter-active,
-.select-leave-active {
-    transition: all 0.3s;
 }
 
 .list-enter,

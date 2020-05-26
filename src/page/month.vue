@@ -40,7 +40,7 @@
 			<ul>
 				<li v-for="item in this.todayData" :key="item.month + Math.random()">
 					<img :src="require(`../icon/${item.typeEN}.svg`)" alt="">	
-					{{item.type}}
+					{{item.typeCN}}
 					{{item.content}}
 				</li>
 			</ul>
