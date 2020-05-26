@@ -62,6 +62,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -88,6 +89,7 @@ export default {
             ],
         };
     },
+    
     watch: {
         $route(to) {
             this.tabActive = to.path;

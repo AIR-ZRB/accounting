@@ -28,12 +28,12 @@
         </footer>
 
         <!-- 弹出警告框 -->
-        <transition name="alert">
+        
             <alertComponent
-                information="没有选择类型"
+                information="没有选择类型,请按支出来选择类型"
                 v-if="showAlert"
             ></alertComponent>
-        </transition>
+      
 
         <!-- 类型 -->
         <transition name="select">
@@ -58,7 +58,7 @@
 </template>
 <script>
 import { setStorage, getStorage } from "../store/store.js";
-
+import { alertComponent,conversation } from "../components/exportComponents.js";
 export default {
     data() {
         return {
@@ -80,6 +80,10 @@ export default {
             ],
             Dialogue: [],
         };
+    },
+    components: {
+        alertComponent,
+        conversation
     },
     methods: {
         getType(type,typeEN) {
@@ -205,50 +209,6 @@ $subjectColor: skyblue;
 .center {
     padding: 5px;
     overflow: hidden;
-    .conversation {
-        max-width: 90%;
-        min-width: 70%;
-        margin-bottom: 10px;
-        height: auto;
-        overflow-x: hidden;
-        img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            float: left;
-        }
-        p {
-            padding: 5px 10px;
-            min-height: 50px;
-            max-width: 80%;
-            margin-left: 5px;
-            background: #f5f6fa;
-            color: #9294a1;
-            font-size: 16px;
-            // line-height: 50px;
-            float: left;
-            margin-top: 6px;
-            border-radius: 3px 15px 15px 15px;
-        }
-    }
-
-    .me {
-        float: right;
-
-        img {
-            float: right;
-        }
-        p {
-            margin-right: 5px;
-            float: right;
-            border-radius: 15px 3px 15px 15px;
-            background: skyblue;
-            color: #fff;
-            :nth-child(1) {
-                margin-right: 10px;
-            }
-        }
-    }
 }
 
 footer {
@@ -337,34 +297,7 @@ footer {
     }
 }
 
-.alert {
-    width: 60%;
-    height: 100px;
-    text-align: center;
-    line-height: 20px;
-    border-radius: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    background: #000;
-    color: #fff;
-    padding: 40px 20px;
-}
 
-// tab栏动画
-
-.alert-enter,
-.alert-leave-to {
-    opacity: 0;
-}
-
-.alert-enter-active,
-.alert-leave-active {
-    transition: all 1s;
-}
 
 .select-enter,
 .select-leave-to {

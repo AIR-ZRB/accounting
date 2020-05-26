@@ -22,6 +22,17 @@ export default {
 
 <style lang="scss">
 
-
+.optionList {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    .right {
+        float: right;
+        height: 100%;
+    }
+}
 
 </style>

@@ -14,14 +14,11 @@ import store from "./store/store.js";
 // 主页
 import view from "./page/index.vue";
 
-// 注册全局组件
-import "./component.js";
+
 
 // Vue实例
 const vm = new Vue({
   el: "#app",
-  data: {},
-  methods: {},
   router,
   store,
   render: (createElement) => {

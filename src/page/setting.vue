@@ -1,12 +1,18 @@
 <template>
     <div>
         <ul>
-            <optionsList optionName="我的名字" :defaultValue="this.$store.state.meId"></optionsList>   
-            <optionsList optionName="老婆名字" :defaultValue="this.$store.state.wife" @click.native="edit"></optionsList>
+            <optionsList
+                optionName="我的名字"
+                :defaultValue="this.$store.state.meId"
+            ></optionsList>
+            <optionsList
+                optionName="老婆名字"
+                :defaultValue="this.$store.state.wife"
+                @click.native="edit"
+            ></optionsList>
 
-            <optionsFilesList optionName="更换头像"></optionsFilesList>
-            <optionsFilesList optionName="老婆头像"></optionsFilesList>
-            
+            <optionsFileList optionName="更换头像"></optionsFileList>
+            <optionsFileList optionName="老婆头像"></optionsFileList>
         </ul>
 
         <div class="editBg" v-if="editShow">
@@ -18,25 +24,25 @@
                 </p>
             </div>
         </div>
-
-
     </div>
 </template>
 
 <script>
-
 import { setStorage, getStorage, setStorageJSON } from "../store/store.js";
-import optionsList from "../components/optionsList.vue"
-
+import {
+    optionsList,
+    optionsFileList,
+} from "../components/exportComponents.js";
 
 export default {
     data() {
         return {
-            editShow: false
+            editShow: false,
         };
     },
     components: {
-        optionsList
+        optionsList,
+        optionsFileList
     },
     methods: {
         edit() {
@@ -49,68 +55,14 @@ export default {
         },
         editCancel() {
             this.editShow = false;
-        }
+        },
     },
-    created(){
-
-    }
+    created() {},
 };
 </script>
 
-
 <style lang="scss">
 
-.optionList {
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    padding: 0 10px;
-    border-bottom: 1px solid #ccc;
-    position: relative;
-    .right {
-        float: right;
-        height: 50px;
-
-        img {
-            margin: 5px 0;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-
-
-    }
-
-    // 读取文件组件的样式
-    #file {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-    }
-
-    .editImage {
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: #000;
-        width: 100%;
-        height: 100%;
-        z-index: 999; 
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center center;
-        span {
-            color: skyblue;
-        }
-    }
-
-
-
-
-}
 
 .editBg {
     width: 100%;
