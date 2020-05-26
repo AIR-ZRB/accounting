@@ -1,6 +1,10 @@
 <template>
     <div class="monthContainer">
         <div class="calendar">
+            <div class="statistics">
+                <span>{{ FullYear }}年{{ month + 1 }}月{{ today }}</span>
+                <span>总消费：{{ statisticsMoney }}</span>
+            </div>
             <div class="monthHeader">
                 <ul>
                     <li v-for="item in this.sevenWord" :key="item">
@@ -36,17 +40,17 @@
         </div>
 
         <div class="activeToday">
-
-			<ul>
-				<li v-for="item in this.todayData" :key="item.month + Math.random()">
-					<img :src="require(`../icon/${item.typeEN}.svg`)" alt="">	
-					{{item.typeCN}}
-					{{item.content}}
-				</li>
-			</ul>
-
-
-		</div>
+            <ul>
+                <li
+                    v-for="item in this.todayData"
+                    :key="item.month + Math.random()"
+                >
+                    <img :src="require(`../icon/${item.typeEN}.svg`)" alt="" />
+                    <span>{{ item.typeCN }}</span>
+                    <span>{{ item.content }}</span>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
@@ -61,8 +65,9 @@ export default {
             MonthFirstDayWeek: 1,
             MonthDays: 1,
             FullYear: 2020,
-			clickToday: null,
-			todayData: []
+            clickToday: null,
+            todayData: [],
+            statisticsMoney: 0,
         };
     },
     methods: {
@@ -91,34 +96,34 @@ export default {
         monthActive(index) {
             // console.log(index);
             // 点击今天会变蓝，且显示今天的数据
-			this.clickToday = index;
-			
+            this.clickToday = index;
+
             let allData = getStorage("azureSky");
-			// console.log(allData);
 
+            let statisticsMoney = 0
+            allData.forEach((element) => {
+                statisticsMoney += !isNaN(element.content)
+                    ? parseInt(element.content)
+                    : 0;
+            });
+            this.statisticsMoney = statisticsMoney;
 
+            this.todayData = allData.filter((item, index) => {
+                return item.today == this.clickToday + 1;
+            });
 
-			this.todayData = allData.filter((item,index)=>{
-				return item.today == this.clickToday + 1;
-			})
+            this.todayData = this.todayData.filter((item, index) => {
+                return item.month == this.month + 1;
+            });
 
-			this.todayData = this.todayData.filter((item,index)=>{
-				return item.month == (this.month + 1)
-			})
-
-			console.log("获取今天数据")
-			console.log(this.todayData)
-
-
-
-
-
+            console.log("获取今天数据");
+            console.log(this.todayData);
         },
     },
     created() {
         // 初始化日历
-		this.getMonth();
-		this.monthActive(this.today - 1);
+        this.getMonth();
+        this.monthActive(this.today - 1);
     },
 };
 </script>
@@ -128,6 +133,15 @@ $subColor: #f0f1f3;
 .monthContainer {
     width: 100%;
     height: 100%;
+
+    .statistics {
+        background: skyblue;
+        text-align: center;
+        color: $subColor;
+        height: 30px;
+        font-size: 18px;
+        line-height: 30px;
+    }
 
     .monthHeaderPage {
         width: 100%;
@@ -195,26 +209,29 @@ $subColor: #f0f1f3;
         }
     }
 
+    .activeToday {
+        width: 100%;
+        ul {
+            padding: 0 10px;
+            li {
+                width: 100%;
+                height: 50px;
+                line-height: 50px;
+                display: flex;
+                align-items: center;
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 20px;
+                }
 
-	.activeToday {
-		width: 100%;
-		ul {
-			padding: 0 10px;
-			li {
-				width: 100%;
-				height: 50px;
-				line-height: 50px;
-				display: flex;
-				align-items: center;
-				img {
-					width: 40px;
-					height: 40px;
-					margin-right: 20px;
-				}
-			}
-		}
-	}
-
-
+                span {
+                    &:last-child {
+                        padding-left: 10px;
+                    }
+                }
+            }
+        }
+    }
 }
 </style>
