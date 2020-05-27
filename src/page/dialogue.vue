@@ -20,7 +20,7 @@
                 <input
                     type="number"
                     v-model="money"
-                    @keyup.enter="()=>commit(typeCN, typeEN, money)"
+                    @keyup.enter="() => commit(typeCN, typeEN, money)"
                 />
             </div>
         </footer>
@@ -28,8 +28,8 @@
         <!-- 弹出警告框 -->
 
         <alertComponent
-            information="请点击支出选择消费类型"
-            v-if="showAlert"
+            :information="showAlertMessage"
+            :showAlert.sync="showAlert"
         ></alertComponent>
 
         <selectType :show="show" @getType="getType"></selectType>
@@ -51,6 +51,7 @@ export default {
             typeEN: "",
             show: false,
             showAlert: false,
+            showAlertMessage: "请点击支出选择消费类型",
             Dialogue: [],
         };
     },
@@ -70,13 +71,18 @@ export default {
 
             if (!typeCN) {
                 // 如果没有选择类型则弹窗警告
+                this.showAlertMessage = "请点击支出选择消费类型";
                 this.showAlert = !this.showAlert;
-                let timer = setTimeout(() => {
-                    clearInterval(timer);
-                    this.showAlert = !this.showAlert;
-                }, 1000);
+                return;
+            } else if (money >= 1000) {
+                // 单次金额超1k弹窗警告
+                this.showAlertMessage = "单次消费不能超过1000";
+                this.showAlert = !this.showAlert;
                 return;
             }
+
+
+
 
             let date = new Date();
 

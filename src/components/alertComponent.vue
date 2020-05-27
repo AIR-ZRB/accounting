@@ -1,8 +1,8 @@
 <template>
     <transition name="alert">
-        <div class="alert">
-            <img src="../icon/warn.svg" alt="">
-            <p> {{ this.information }} </p>
+        <div class="alert" v-if="showAlert">
+            <img src="../icon/warn.svg" alt="" />
+            <p>{{ this.information }}</p>
         </div>
     </transition>
 </template>
@@ -13,6 +13,18 @@ export default {
         information: {
             type: String,
             default: "这是一条提示消息",
+        },
+        showAlert: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    watch: {
+        showAlert() {
+            let timer = setTimeout(() => {
+                clearInterval(timer);
+                this.$emit("update:showAlert",false)
+            }, 1000);
         },
     },
 };

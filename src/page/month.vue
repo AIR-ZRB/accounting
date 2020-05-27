@@ -24,16 +24,13 @@
                     <li
                         v-for="(item, index) in this.MonthDays"
                         :class="[
-                            { active: index === today - 1 ? true : false },
-                            {
-                                clickActive:
-                                    index === clickToday ? true : false,
-                            },
+                            { active: index === today - 1 && true },
+                            { clickActive: index === clickToday && true },
                         ]"
                         :key="item"
                         @click="monthActive(index)"
                     >
-                        {{ item }}
+                        <span>{{ item }}</span>    
                     </li>
                 </ul>
             </div>
@@ -76,22 +73,26 @@ export default {
 
             // 获取今天几号1~31
             this.today = date.getDate();
-            console.log("获得今天日期" + this.today);
 
             // 获得月0~11
             this.month = date.getMonth();
-            console.log("获得本月月份" + (this.month + 1));
 
             this.FullYear = date.getFullYear();
-            console.log(this.FullYear);
+
+            console.log(`${this.FullYear}.${this.month + 1}.${this.today}`);
 
             // 获得一个月又多少天
-            this.MonthDays = new Date(2020, this.month + 1, 0).getDate();
-            console.log(this.MonthDays);
+            this.MonthDays = new Date(
+                this.FullYear,
+                this.month + 1,
+                0
+            ).getDate();
+
+            console.log("本月共有" + this.MonthDays);
 
             // 获取每个月第一天的星期，用来做渲染
             this.MonthFirstDayWeek = new Date(2020, this.month, 1).getUTCDay();
-            console.log(this.MonthFirstDayWeek);
+            console.log("本月第一天星期" + this.MonthFirstDayWeek);
         },
         monthActive(index) {
             // console.log(index);
@@ -100,7 +101,8 @@ export default {
 
             let allData = getStorage("azureSky");
 
-            let statisticsMoney = 0
+            // 计算本月总共消费
+            let statisticsMoney = 0;
             allData.forEach((element) => {
                 statisticsMoney += !isNaN(element.content)
                     ? parseInt(element.content)
@@ -108,6 +110,7 @@ export default {
             });
             this.statisticsMoney = statisticsMoney;
 
+            // 获取点击的那天的数据
             this.todayData = allData.filter((item, index) => {
                 return item.today == this.clickToday + 1;
             });
@@ -115,9 +118,6 @@ export default {
             this.todayData = this.todayData.filter((item, index) => {
                 return item.month == this.month + 1;
             });
-
-            console.log("获取今天数据");
-            console.log(this.todayData);
         },
     },
     created() {
@@ -198,6 +198,7 @@ $subColor: #f0f1f3;
                     height: 60px;
                     width: 14.2%;
                     text-align: right;
+                    position: relative;
                 }
                 .active {
                     background: #ffc653;
@@ -205,6 +206,9 @@ $subColor: #f0f1f3;
                 }
                 .clickActive {
                     background: skyblue;
+                }
+                .hint-text {
+                  color: skyblue;
                 }
             }
         }

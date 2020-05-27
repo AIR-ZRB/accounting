@@ -76,8 +76,6 @@ export default {
     watch: {
         $route(to) {
             this.tabActive = to.path;
-            console.log(this.tabActive)
-            // console.log(to.path); //当前路由
         },
     },
     methods: {
@@ -86,7 +84,7 @@ export default {
             // tabs是否显示
             document.addEventListener("click", (event) => {
                 let clickNow = event.target.className;
-                console.log("全局点击事件的Class" + clickNow);
+                // console.log("全局点击事件的Class" + clickNow);
                 clickNow == "setting" || clickNow == "tabs"
                     ? (this.tabs = true)
                     : (this.tabs = false);
