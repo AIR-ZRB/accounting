@@ -67,21 +67,21 @@ export default {
             this.typeEN = typeEN;
         },
         commit(typeCN, typeEN, money) {
-            // 发送消息告诉对方
-
+            
+            let warnText = (warnText) => {
+                this.showAlertMessage = warnText;
+                this.showAlert = !this.showAlert;
+            };
             if (!typeCN) {
-                // 如果没有选择类型则弹窗警告
-                this.showAlertMessage = "请点击支出选择消费类型";
-                this.showAlert = !this.showAlert;
+                warnText("请选择消费类型");
                 return;
-            } else if (money >= 1000) {
-                // 单次金额超1k弹窗警告
-                this.showAlertMessage = "单次消费不能超过1000";
-                this.showAlert = !this.showAlert;
-                return;
+            } else if (money >= 1000 || money <= 0 || money === "" || /^0+(.+)/.test(money)) {
+                money >= 1000 && warnText("单次消费不能超过1000");
+                money <= 0 && warnText("单次消费不能低于或等于0");
+                money === "" && warnText("金额不能为空");
+                /^0+(.+)/.test(money) && warnText("请不要在金额前面加0");
+                return ;
             }
-
-
 
 
             let date = new Date();
@@ -141,6 +141,9 @@ export default {
         this.Dialogue = getStorage("azureSky") || [
             { content: "你好", person: "wife" },
         ];
+    },
+    mounted() {
+        this.windowScrollBottom();
     },
     updated() {
         // 让页面始终再最底部

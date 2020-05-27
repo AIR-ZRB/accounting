@@ -215,7 +215,7 @@ body {
 
     .broadside-enter,
     .broadside-leave-to {
-        transform: translateX(-200px);
+        transform: translateX(-300px);
     }
     .broadside-enter-active,
     .broadside-leave-active {
