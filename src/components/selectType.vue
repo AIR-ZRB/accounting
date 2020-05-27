@@ -1,18 +1,25 @@
 <template>
     <!-- 类型 -->
     <transition name="select">
-        <div class="selectType" v-show="show">
-            <ul>
-                <li
-                    class="typesCircle"
-                    v-for="item in types"
-                    :key="item.name.CN"
-                    @click="getType(item.name.CN, item.name.EN)"
-                >
-                    <img :src="require(`../icon/${item.name.EN}.svg`)" alt="" />
-                    <p>{{ item.name.CN }}</p>
-                </li>
-            </ul>
+        <div class="select-box" v-show="show" @click="getTypes">
+            <div class="selectType">
+                <ul>
+                    <li
+                        class="typesCircle"
+                        v-for="item in types"
+                        :key="item.name.CN"
+                        @click="getType(item.name.CN, item.name.EN)"
+                        :data-namecn="item.name.CN"
+                        :data-nameen="item.name.EN"
+                    >
+                        <img
+                            :src="require(`../icon/${item.name.EN}.svg`)"
+                            alt=""
+                        />
+                        <p>{{ item.name.CN }}</p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </transition>
 </template>
@@ -23,7 +30,7 @@ export default {
         show: {
             type: Boolean,
             default: false,
-        }
+        },
     },
     data() {
         return {
@@ -41,49 +48,72 @@ export default {
         };
     },
     methods: {
-         getType(typeCN,typeEN) {
-            this.$emit("getType",typeCN,typeEN);
+        // 事件委托？
+        
+        getTypes(event){    
+            console.log(event)
+            console.log(event.target.className);
+            console.log(event.target.dataset);
+
+            const aa = this.types.filter((element)=>{
+                // return element.name.CN === 
+            })
+
+            // console.log(aa);
+        },
+        getType(typeCN, typeEN) {
+            this.$emit("getType", typeCN, typeEN);
         },
     },
 };
 </script>
 
 <style lang="scss">
-.selectType {
-    width: 90%;
-    height: 300px;
-    padding: 20px;
-    transform: translateY(0px);
-    border-radius: 10px;
-    opacity: 0.5;
+.select-box {
+    width: 100%;
+    height: 100%;
     position: fixed;
+    background: rgba(0, 0, 0, 0.6);
     top: 0;
-    bottom: 0;
-    right: 0;
     left: 0;
-    margin: auto;
-    overflow-y: scroll;
+    .selectType {
+        width: 90%;
+        height: 300px;
+        padding: 20px;
+        transform: translateY(0px);
+        border-radius: 10px;
+        opacity: 0.8;
+        border-radius: 10px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+        overflow-y: scroll;
+        background: #fff;
 
-    ul {
-        width: 100%;
-        height: 100%;
+        ul {
+            width: 100%;
+            height: 100%;
 
-        .typesCircle {
-            list-style: none;
-            height: 80px;
-            width: 25%;
+            .typesCircle {
+                list-style: none;
+                height: 80px;
+                width: 25%;
 
-            text-align: center;
-            border-radius: 50%;
-            // background: skyblue;
-            float: left;
+                text-align: center;
+                border-radius: 50%;
+                // background: skyblue;
+                float: left;
 
-            img {
-                width: 40px;
-                height: 40px;
-            }
-            p {
-                margin: 0;
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+                p {
+                    margin: 0;
+                }
             }
         }
     }
