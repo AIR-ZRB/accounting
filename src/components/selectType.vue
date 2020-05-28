@@ -48,18 +48,9 @@ export default {
         };
     },
     methods: {
-        // 事件委托？
-        
+        // 事件委托？  
         getTypes(event){    
-            console.log(event)
-            console.log(event.target.className);
-            console.log(event.target.dataset);
-
-            const aa = this.types.filter((element)=>{
-                // return element.name.CN === 
-            })
-
-            // console.log(aa);
+          event.target.className === "select-box" && this.$emit("update:show",false) ;
         },
         getType(typeCN, typeEN) {
             this.$emit("getType", typeCN, typeEN);

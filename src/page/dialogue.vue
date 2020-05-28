@@ -32,7 +32,7 @@
             :showAlert.sync="showAlert"
         ></alertComponent>
 
-        <selectType :show="show" @getType="getType"></selectType>
+        <selectType :show.sync="show" @getType="getType"></selectType>
     </div>
 </template>
 <script>
@@ -76,9 +76,9 @@ export default {
                 warnText("请选择消费类型");
                 return;
             } else if (money >= 1000 || money <= 0 || money === "" || /^0+(.+)/.test(money)) {
+                money === "" && warnText("金额不能为空");
                 money >= 1000 && warnText("单次消费不能超过1000");
                 money <= 0 && warnText("单次消费不能低于或等于0");
-                money === "" && warnText("金额不能为空");
                 /^0+(.+)/.test(money) && warnText("请不要在金额前面加0");
                 return ;
             }
