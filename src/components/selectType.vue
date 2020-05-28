@@ -4,6 +4,14 @@
         <div class="select-box" v-show="show" @click="getTypes">
             <div class="selectType">
                 <ul>
+                    <li>
+                        <span
+                            v-for="item in allTypes"
+                            :key="item.type"
+                            :class="item.type === currentSelect || 'active'"
+                            >{{ item.type }}</span
+                        >
+                    </li>
                     <li
                         class="typesCircle"
                         v-for="item in types"
@@ -34,27 +42,71 @@ export default {
     },
     data() {
         return {
-            types: [
-                { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
-                { name: { CN: "午餐", EN: "lunch" }, price: 0 },
-                { name: { CN: "晚餐", EN: "supper" }, price: 0 },
-                { name: { CN: "饮料", EN: "beverages" }, price: 0 },
-                { name: { CN: "零食", EN: "snacks" }, price: 0 },
-                { name: { CN: "水果", EN: "fruits" }, price: 0 },
-                { name: { CN: "话费", EN: "telephoneCharge" }, price: 0 },
-                { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
-                { name: { CN: "其他", EN: "rests" }, price: 0 },
+            currentSelect: "支出",
+            allTypes: [
+                {
+                    type: "支出",
+                    active: true,
+                    types: [
+                        { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
+                        { name: { CN: "午餐", EN: "lunch" }, price: 0 },
+                        { name: { CN: "晚餐", EN: "supper" }, price: 0 },
+                        { name: { CN: "饮料", EN: "beverages" }, price: 0 },
+                        { name: { CN: "零食", EN: "snacks" }, price: 0 },
+                        { name: { CN: "水果", EN: "fruits" }, price: 0 },
+                        { name: { CN: "买菜", EN: "vegetables" }, price: 0 },
+                        { name: { CN: "衣服", EN: "clothing" }, price: 0 },
+                        { name: { CN: "游戏", EN: "game" }, price: 0 },
+                        { name: { CN: "旅游", EN: "travel" }, price: 0 },
+                        {
+                            name: { CN: "话费", EN: "telephoneCharge" },
+                            price: 0,
+                        },
+                        { name: { CN: "购物", EN: "shoppingCart" }, price: 0 },
+                        { name: { CN: "医院", EN: "hospital" }, price: 0 },
+                        { name: { CN: "其他", EN: "rests" }, price: 0 },
+                    ],
+                },
+                {
+                    type: "收入",
+                    active: false,
+                    types: [
+                        { name: { CN: "工作", EN: "work" }, price: 0 },
+                        { name: { CN: "兼职", EN: "partTime" }, price: 0 },
+                        { name: { CN: "生活费", EN: "alimony" }, price: 0 },
+                        { name: { CN: "报销", EN: "refund" }, price: 0 },
+                        { name: { CN: "PY交易", EN: "transaction" }, price: 0 },
+                        { name: { CN: "其他", EN: "rests" }, price: 0 },
+                    ],
+                },
             ],
+
+            types: [],
         };
     },
     methods: {
-        // 事件委托？  
-        getTypes(event){    
-          event.target.className === "select-box" && this.$emit("update:show",false) ;
+        // 事件委托？
+        getTypes(event) {
+            if (
+                event.target.innerHTML === "支出" ||
+                event.target.innerHTML === "收入"
+            ) {
+                const index = this.allTypes.findIndex((element) => {
+                    return element.type === event.target.innerHTML;
+                });
+                this.types = this.allTypes[index].types;
+                this.currentSelect = this.allTypes[index].type;
+            }
+
+            event.target.className === "select-box" &&
+                this.$emit("update:show", false);
         },
         getType(typeCN, typeEN) {
             this.$emit("getType", typeCN, typeEN);
         },
+    },
+    created() {
+        this.types = this.allTypes[0].types;
     },
 };
 </script>
@@ -70,7 +122,7 @@ export default {
     .selectType {
         width: 90%;
         height: 300px;
-        padding: 20px;
+        padding: 0 0 20px 0;
         transform: translateY(0px);
         border-radius: 10px;
         opacity: 0.8;
@@ -88,16 +140,31 @@ export default {
             width: 100%;
             height: 100%;
 
+            li {
+                &:first-child {
+                    width: 100%;
+                    height: 50px;
+                    line-height: 50px;
+                    display: flex;
+                    margin-bottom: 10px;
+                    span {
+                        width: 50%;
+                        text-align: center;
+                    }
+
+                    span.active {
+                        background: #eee;
+                    }
+                }
+            }
+
             .typesCircle {
                 list-style: none;
-                height: 80px;
+                height: 90px;
                 width: 25%;
-
                 text-align: center;
                 border-radius: 50%;
-                // background: skyblue;
                 float: left;
-
                 img {
                     width: 40px;
                     height: 40px;
