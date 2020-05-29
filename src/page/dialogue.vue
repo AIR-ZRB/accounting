@@ -1,16 +1,31 @@
 <template>
     <div>
         <div class="center" ref="screen">
-            <!-- 路由部分 -->
             <!-- 对话组件 -->
-            <conversation
-                :key="item.money"
-                :person="item.person"
-                :dialogue="item.content"
-                :type="item.typeCN"
-                v-for="item in this.Dialogue"
-            ></conversation>
+            <transition-group name="dialog">
+                <conversation
+                    :key="item.time"
+                    :person="item.person"
+                    :dialogue="item.content"
+                    :type="item.typeCN"
+                    v-for="item in this.Dialogue"
+                ></conversation>
+            </transition-group>
         </div>
+
+        <!-- 弹出警告框 -->
+        <alertComponent
+            :information="showAlertMessage"
+            :showAlert.sync="showAlert"
+        ></alertComponent>
+
+        <!-- 选择类型 -->
+        <selectType
+            :show.sync="show"
+            :type.sync="type"
+            :typeCN.sync="typeCN"
+            :typeEN.sync="typeEN"
+        ></selectType>
 
         <!-- 发消息组件 -->
         <footer>
@@ -20,25 +35,10 @@
                 <input
                     type="number"
                     v-model="money"
-                    @keyup.enter="() => commit(type,typeCN, typeEN, money)"
+                    @keyup.enter="() => commit(type, typeCN, typeEN, money)"
                 />
             </div>
         </footer>
-
-
-        <!-- 弹出警告框 -->
-        <alertComponent
-            :information="showAlertMessage"
-            :showAlert.sync="showAlert"
-        ></alertComponent>
-
-        <!-- 选择类型 -->
-        <selectType 
-            :show.sync="show"
-            :type.sync="type"
-            :typeCN.sync="typeCN"
-            :typeEN.sync="typeEN" 
-         ></selectType>
     </div>
 </template>
 <script>
@@ -68,8 +68,7 @@ export default {
         selectType,
     },
     methods: {
-        commit(type,typeCN, typeEN, money) {
-            
+        commit(type, typeCN, typeEN, money) {
             let warnText = (warnText) => {
                 this.showAlertMessage = warnText;
                 this.showAlert = !this.showAlert;
@@ -77,14 +76,18 @@ export default {
             if (!typeCN) {
                 warnText("请选择消费类型");
                 return;
-            } else if (money >= 1000 || money <= 0 || money === "" || /^0+(.+)/.test(money)) {
+            } else if (
+                money >= 1000 ||
+                money <= 0 ||
+                money === "" ||
+                /^0+(.+)/.test(money)
+            ) {
                 money === "" && warnText("金额不能为空");
                 money >= 1000 && warnText("单次消费不能超过1000");
                 money <= 0 && warnText("单次消费不能低于或等于0");
                 /^0+(.+)/.test(money) && warnText("请不要在金额前面加0");
-                return ;
+                return;
             }
-
 
             let date = new Date();
 
@@ -96,6 +99,7 @@ export default {
                 person: "me",
                 month: date.getMonth() + 1,
                 today: date.getDate(),
+                time: +new Date(),
             });
 
             // 获取随机对话(根据类型)
@@ -118,10 +122,10 @@ export default {
                 this.Dialogue.push({
                     content: res.data["breakfast"][randomDialogue],
                     person: "wife",
+                    time: +new Date() + 1,
                 });
             });
 
-            console.log(this.type)
         },
         // 添加到vuex里去
         judgeType(type, money) {
@@ -144,14 +148,14 @@ export default {
     },
     created() {
         this.Dialogue = getStorage("azureSky") || [
-            { content: "你好", person: "wife" },
+            { content: "你好", person: "wife", time: +new Date() + 1, },
         ];
     },
     mounted() {
         this.windowScrollBottom();
     },
     updated() {
-        console.log(this.type)
+        console.log(this.type);
         // 让页面始终再最底部
         this.windowScrollBottom();
         // 写入localStorage对象里
@@ -251,5 +255,16 @@ footer {
 .list-enter-active,
 .list-leave-active {
     transition: all 0.3s;
+}
+
+.dialog-enter,
+.dialog-leave-to {
+    opacity: 0;
+    transform: scale(2) translateX(1000px);
+}
+
+.dialog-enter-active,
+.dialog-leave-active {
+    transition: all .5s;
 }
 </style>

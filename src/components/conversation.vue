@@ -1,7 +1,7 @@
 <template>
     <!--  2. 添加动画(无头绪) -->
-    <transition>
-        <div :class="[pople, conversation]">
+    <transition name="dialog">
+        <div :class="[pople, conversation]" >
             <img :src="picture" alt="" />
             <p class="dialogue">
                 <span>{{ this.type }}</span>
@@ -88,4 +88,18 @@ export default {
         }
     }
 }
+
+.dialog-enter,
+.dialog-leave-to {
+    opacity: 0;
+    transform: scale(2);;
+}
+
+
+
+.dialog-enter-active,
+.dialog-leave-active {
+    transition: all 0.5s;
+}
+
 </style>

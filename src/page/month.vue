@@ -1,10 +1,6 @@
 <template>
     <div class="monthContainer">
         <div class="calendar">
-            <div class="statistics">
-                <span>{{ FullYear }}年{{ month + 1 }}月{{ today }}</span>
-                <span>总消费：{{ statisticsMoney }}</span>
-            </div>
             <div class="monthHeader">
                 <ul>
                     <li v-for="item in this.sevenWord" :key="item">
@@ -30,7 +26,7 @@
                         :key="item"
                         @click="monthActive(index)"
                     >
-                        <span>{{ item }}</span>    
+                        <span>{{ item }}</span>
                     </li>
                 </ul>
             </div>
@@ -38,6 +34,12 @@
 
         <div class="activeToday">
             <ul>
+                <li>
+                    <span>{{ FullYear }}.{{ month + 1 }}</span>
+                    <span>消费：{{ statisticsMoney }}</span>
+                    <span>|</span>
+                    <span>收入：{{ incomeMoney }}</span>
+                </li>
                 <li
                     v-for="item in this.todayData"
                     :key="item.month + Math.random()"
@@ -66,6 +68,7 @@ export default {
             clickToday: null,
             todayData: [],
             statisticsMoney: 0,
+            incomeMoney: 0,
         };
     },
     methods: {
@@ -103,13 +106,26 @@ export default {
             let allData = getStorage("azureSky");
 
             // 计算本月总共消费
-            let statisticsMoney = 0;
-            allData.forEach((element) => {
-                statisticsMoney += !isNaN(element.content)
-                    ? parseInt(element.content)
-                    : 0;
+            let filterData = allData.filter((element) => {
+                return element.person === "me";
             });
-            this.statisticsMoney = statisticsMoney;
+
+            const incomeArr = [];
+            const statisticsArr = [];
+            for (let i = 0; i < filterData.length; i++) {
+                filterData[i].type === "收入"
+                    ? incomeArr.push(filterData[i])
+                    : statisticsArr.push(filterData[i]);
+            }
+            function getMoney(dataArr) {
+                let moneySum = 0;
+                dataArr.forEach((element) => {
+                    moneySum += parseInt(element.content);
+                });
+                return moneySum;
+            }
+            this.incomeMoney = getMoney(incomeArr)
+            this.statisticsMoney = getMoney(statisticsArr)
 
             // 获取点击的那天的数据
             this.todayData = allData.filter((item, index) => {
@@ -134,16 +150,6 @@ $subColor: #f0f1f3;
 .monthContainer {
     width: 100%;
     height: 100%;
-
-    .statistics {
-        background: skyblue;
-        text-align: center;
-        color: $subColor;
-        height: 30px;
-        font-size: 18px;
-        line-height: 30px;
-        border-radius: 5px;
-    }
 
     .monthHeaderPage {
         width: 100%;
@@ -196,7 +202,7 @@ $subColor: #f0f1f3;
                 li {
                     color: #262a35;
                     border-bottom: 1px solid $subColor;
-                    height: 60px;
+                    height: 55px;
                     width: 14.2%;
                     text-align: right;
                     position: relative;
@@ -209,7 +215,7 @@ $subColor: #f0f1f3;
                     background: skyblue;
                 }
                 .hint-text {
-                  color: skyblue;
+                    color: skyblue;
                 }
             }
         }
@@ -220,6 +226,18 @@ $subColor: #f0f1f3;
         ul {
             padding: 0 10px;
             li {
+                &:first-child {
+                    text-align: center;
+                    color: #ccc;
+                    height: 30px;
+                    font-size: 16px;
+                    line-height: 30px;
+                    justify-content: flex-end;
+                    span {
+                        margin-right: 15px;
+                    }
+                }
+
                 width: 100%;
                 height: 50px;
                 line-height: 50px;
