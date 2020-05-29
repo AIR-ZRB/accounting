@@ -9,10 +9,10 @@
                     :dialogue="item.content"
                     :type="item.typeCN"
                     v-for="item in this.Dialogue"
-                    @touchstart.native="() => (touchData.start = +new Date())"
-                    @touchend.native="
-                        () => selectDialog(item.time, +new Date())
+                    @touchstart.native="
+                        (event) => selectDialog(event, item.time, +new Date())
                     "
+                    @touchend.native="() => (touchData.end = +new Date())"
                 ></conversation>
             </transition-group>
         </div>
@@ -67,6 +67,7 @@ export default {
             touchData: {
                 start: 0,
                 end: 0,
+                timer: null,
             },
         };
     },
@@ -116,15 +117,46 @@ export default {
             this.judgeType(this.typeEN, money);
         },
         // 用于删除聊天中的数据
-        selectDialog(time, endTime) {
-            const touchTime = endTime - this.touchData.start;
-            if (touchTime >= 1000) {
+        selectDialog(event, time, startTime) {
+            // console.log(this.touchData.timer);
+            this.touchData.timer && clearInterval(this.touchData.timer);
+
+            event.target.parentNode.classList.add("shrinkAnimation");
+
+            // let flag = startTime;
+            // this.touchData.timer = setInterval(() => {
+            //     flag += 500;
+            //     // console.log(flag);
+            //     // console.log(this.touchData.end);
+            //     if (this.touchData.end - startTime > 1000) {
+            //         clearInterval(this.touchData.timer);
+            //         event.target.parentNode.classList.remove("shrinkAnimation");
+            //         // console.log("????????");
+            //     } else {
+            //         const index = this.Dialogue.findIndex((element) => {
+            //             return element.time === time;
+            //         });
+            //         this.Dialogue.splice(index, 2);
+            //         clearInterval(this.touchData.timer);
+            //     }
+            // }, 500);
+
+            // if (flag) {
+            // }
+
+            // if (date >= 1000) {
                 const index = this.Dialogue.findIndex((element) => {
                     return element.time === time;
                 });
-
                 this.Dialogue.splice(index, 2);
-            }
+            // }else {
+            //      event.target.parentNode.classList.remove("shrinkAnimation");
+            // }
+
+            // const touchTime = endTime - this.touchData.start;
+            // if (touchTime >= 1000) {
+
+            // }
         },
 
         // 让wife随机对话
@@ -286,5 +318,9 @@ footer {
 .dialog-enter-active,
 .dialog-leave-active {
     transition: all 0.5s;
+}
+
+.shrinkAnimation {
+    transform: scale(1.2);
 }
 </style>
