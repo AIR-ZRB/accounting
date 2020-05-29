@@ -1,7 +1,6 @@
 <template>
     <!-- 这个是主页面的公共区域 -->
     <!-- 公共样式也在这里写 -->
-
     <div class="container">
         <!-- 头部分 -->
         <header class="index-header">

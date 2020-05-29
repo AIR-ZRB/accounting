@@ -16,7 +16,6 @@
                         class="typesCircle"
                         v-for="item in types"
                         :key="item.name.CN"
-                        @click="getType(item.name.CN, item.name.EN)"
                         :data-namecn="item.name.CN"
                         :data-nameen="item.name.EN"
                     >
@@ -46,7 +45,6 @@ export default {
             allTypes: [
                 {
                     type: "支出",
-                    active: true,
                     types: [
                         { name: { CN: "早餐", EN: "breakfast" }, price: 0 },
                         { name: { CN: "午餐", EN: "lunch" }, price: 0 },
@@ -69,7 +67,6 @@ export default {
                 },
                 {
                     type: "收入",
-                    active: false,
                     types: [
                         { name: { CN: "工作", EN: "work" }, price: 0 },
                         { name: { CN: "兼职", EN: "partTime" }, price: 0 },
@@ -80,17 +77,20 @@ export default {
                     ],
                 },
             ],
-
             types: [],
         };
     },
     methods: {
-        // 事件委托？
         getTypes(event) {
-            if (
-                event.target.innerHTML === "支出" ||
-                event.target.innerHTML === "收入"
-            ) {
+            if (event.target.parentNode.dataset.namecn) {
+                const name = event.target.parentNode.dataset;
+                this.$emit("update:typeCN", name.namecn);
+                this.$emit("update:typeEN", name.nameen);
+                this.$emit("update:show", false);
+            }
+
+            const targetType = event.target.innerHTML;
+            if (targetType === "支出" || targetType === "收入") {
                 const index = this.allTypes.findIndex((element) => {
                     return element.type === event.target.innerHTML;
                 });
@@ -100,9 +100,6 @@ export default {
 
             event.target.className === "select-box" &&
                 this.$emit("update:show", false);
-        },
-        getType(typeCN, typeEN) {
-            this.$emit("getType", typeCN, typeEN);
         },
     },
     created() {

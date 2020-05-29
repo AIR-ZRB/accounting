@@ -32,7 +32,12 @@
             :showAlert.sync="showAlert"
         ></alertComponent>
 
-        <selectType :show.sync="show" @getType="getType"></selectType>
+        <selectType 
+            :show.sync="show"
+            :type.sync="type"
+            :typeCN.sync="typeCN"
+            :typeEN.sync="typeEN" 
+         ></selectType>
     </div>
 </template>
 <script>
@@ -47,6 +52,7 @@ export default {
     data() {
         return {
             money: 0,
+            type: "支出",
             typeCN: "",
             typeEN: "",
             show: false,
@@ -62,7 +68,7 @@ export default {
     },
     methods: {
         getType(typeCN, typeEN) {
-            this.show = !this.show;
+            // this.show = !this.show;
             this.typeCN = typeCN;
             this.typeEN = typeEN;
         },

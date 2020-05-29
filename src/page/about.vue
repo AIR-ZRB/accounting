@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             dialog: [
-                "本APP/PWA是由Vue全家桶写成的",
+                "本APP/SPA是由Vue全家桶写成的",
                 "存储是用的H5的本地存储功能，在APP上数据可能会由随时消失的风险",
                 "还有许多功能没有完善后续会持续更新",
             ],
