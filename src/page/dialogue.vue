@@ -9,6 +9,10 @@
                     :dialogue="item.content"
                     :type="item.typeCN"
                     v-for="item in this.Dialogue"
+                    @touchstart.native="() => (touchData.start = +new Date())"
+                    @touchend.native="
+                        () => selectDialog(item.time, +new Date())
+                    "
                 ></conversation>
             </transition-group>
         </div>
@@ -60,6 +64,10 @@ export default {
             showAlert: false,
             showAlertMessage: "请点击支出选择消费类型",
             Dialogue: [],
+            touchData: {
+                start: 0,
+                end: 0,
+            },
         };
     },
     components: {
@@ -107,6 +115,17 @@ export default {
             // 判断类型
             this.judgeType(this.typeEN, money);
         },
+        // 用于删除聊天中的数据
+        selectDialog(time, endTime) {
+            const touchTime = endTime - this.touchData.start;
+            if (touchTime >= 1000) {
+                const index = this.Dialogue.findIndex((element) => {
+                    return element.time === time;
+                });
+
+                this.Dialogue.splice(index, 2);
+            }
+        },
 
         // 让wife随机对话
         getWifeDialogue(type, money) {
@@ -119,13 +138,14 @@ export default {
                 );
 
                 // 添加到对话中去
-                this.Dialogue.push({
-                    content: res.data["breakfast"][randomDialogue],
-                    person: "wife",
-                    time: +new Date() + 1,
-                });
+                setTimeout(() => {
+                    this.Dialogue.push({
+                        content: res.data["breakfast"][randomDialogue],
+                        person: "wife",
+                        time: +new Date() + 1,
+                    });
+                }, 400);
             });
-
         },
         // 添加到vuex里去
         judgeType(type, money) {
@@ -148,7 +168,7 @@ export default {
     },
     created() {
         this.Dialogue = getStorage("azureSky") || [
-            { content: "你好", person: "wife", time: +new Date() + 1, },
+            { content: "你好", person: "wife", time: +new Date() + 1 },
         ];
     },
     mounted() {
@@ -265,6 +285,6 @@ footer {
 
 .dialog-enter-active,
 .dialog-leave-active {
-    transition: all .5s;
+    transition: all 0.5s;
 }
 </style>
