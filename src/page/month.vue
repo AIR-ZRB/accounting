@@ -43,6 +43,7 @@
                     :key="item.month + Math.random()"
                 >
                     <img :src="require(`../icon/${item.typeEN}.svg`)" alt="" />
+                    <span>{{ item.type }}</span>
                     <span>{{ item.typeCN }}</span>
                     <span>{{ item.content }}</span>
                 </li>
@@ -231,6 +232,9 @@ $subColor: #f0f1f3;
                 }
 
                 span {
+                    &:nth-of-type(1) {
+                        padding-right: 10px;
+                    }
                     &:last-child {
                         padding-left: 10px;
                     }

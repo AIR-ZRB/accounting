@@ -20,18 +20,19 @@
                 <input
                     type="number"
                     v-model="money"
-                    @keyup.enter="() => commit(typeCN, typeEN, money)"
+                    @keyup.enter="() => commit(type,typeCN, typeEN, money)"
                 />
             </div>
         </footer>
 
-        <!-- 弹出警告框 -->
 
+        <!-- 弹出警告框 -->
         <alertComponent
             :information="showAlertMessage"
             :showAlert.sync="showAlert"
         ></alertComponent>
 
+        <!-- 选择类型 -->
         <selectType 
             :show.sync="show"
             :type.sync="type"
@@ -67,12 +68,7 @@ export default {
         selectType,
     },
     methods: {
-        getType(typeCN, typeEN) {
-            // this.show = !this.show;
-            this.typeCN = typeCN;
-            this.typeEN = typeEN;
-        },
-        commit(typeCN, typeEN, money) {
+        commit(type,typeCN, typeEN, money) {
             
             let warnText = (warnText) => {
                 this.showAlertMessage = warnText;
@@ -93,6 +89,7 @@ export default {
             let date = new Date();
 
             this.Dialogue.push({
+                type,
                 typeCN,
                 typeEN,
                 content: money,
@@ -123,6 +120,8 @@ export default {
                     person: "wife",
                 });
             });
+
+            console.log(this.type)
         },
         // 添加到vuex里去
         judgeType(type, money) {
@@ -152,6 +151,7 @@ export default {
         this.windowScrollBottom();
     },
     updated() {
+        console.log(this.type)
         // 让页面始终再最底部
         this.windowScrollBottom();
         // 写入localStorage对象里

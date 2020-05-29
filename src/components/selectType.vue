@@ -41,8 +41,8 @@ export default {
     },
     data() {
         return {
-            currentSelect: "支出",
-            allTypes: [
+            currentSelect: "支出",      // 当前选择的收入/消费
+            allTypes: [                 // 全部数据
                 {
                     type: "支出",
                     types: [
@@ -77,18 +77,11 @@ export default {
                     ],
                 },
             ],
-            types: [],
+            types: [],                  // 当前渲染的类型
         };
     },
     methods: {
         getTypes(event) {
-            if (event.target.parentNode.dataset.namecn) {
-                const name = event.target.parentNode.dataset;
-                this.$emit("update:typeCN", name.namecn);
-                this.$emit("update:typeEN", name.nameen);
-                this.$emit("update:show", false);
-            }
-
             const targetType = event.target.innerHTML;
             if (targetType === "支出" || targetType === "收入") {
                 const index = this.allTypes.findIndex((element) => {
@@ -96,6 +89,14 @@ export default {
                 });
                 this.types = this.allTypes[index].types;
                 this.currentSelect = this.allTypes[index].type;
+            }
+
+            if (event.target.parentNode.dataset.namecn) {
+                const name = event.target.parentNode.dataset;
+                this.$emit("update:type", this.currentSelect);
+                this.$emit("update:typeCN", name.namecn);
+                this.$emit("update:typeEN", name.nameen);
+                this.$emit("update:show", false);
             }
 
             event.target.className === "select-box" &&
