@@ -51,7 +51,7 @@ export default {
             let file = this.$refs.fileInput.files[0];
             reads.readAsDataURL(file);
             reads.onloadend = function(e) {
-                console.log(_this.who);
+                
                 const nowPicture = _this.who+ "Picture";
                 _this.$store.commit("revise",{
                     name: nowPicture,
@@ -66,7 +66,9 @@ export default {
                 const getSetting = getStorage("azureSkySetting") || {};
 
                 getSetting[nowPicture] =  this.result;
+                
                 setStorage("azureSkySetting",getSetting);
+                console.log("更新完成")
 
             };
         },

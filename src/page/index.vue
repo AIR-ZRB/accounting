@@ -105,14 +105,15 @@ export default {
         this.nowClick();
 
         const getSetting = getStorage("azureSkySetting");
-        console.log(getSetting);
         for(let key in getSetting){
-            // this.$store.commit("res")
+            this.$store.commit("revise",{
+                name: key,
+                value: getSetting[key]
+            })
         }
+        console.log(this.$store.state)
 
-
-
-
+        
     },
 };
 </script>
