@@ -3,19 +3,25 @@
         <input
             type="file"
             id="file"
+            ref="fileInput"
             accept="image/*"
             @change="uploadfile"
             class="selectImg"
+
         />
         <span>{{ this.optionName }}</span>
         <span class="right">
             <img :src="defaultValue" id="img" />
         </span>
-        <div class="editImage" v-show="isShowEditImg"></div>
+        <!-- <div class="editImage" v-show="isShowEditImg"></div>
+         -->
+
     </li>
 </template>
 
 <script>
+import { setStorage,getStorage } from "../store/store.js";
+
 export default {
     data() {
         return {
@@ -30,6 +36,10 @@ export default {
         defaultValue: {
             type: String,
             default: ""
+        },
+        who: {
+            type: String,
+            default: "master"
         }
     },
     methods: {
@@ -37,26 +47,27 @@ export default {
         // 多个组件只有第一个生效
         uploadfile(event) {
             let _this = this;
-            // console.log(this);
             let reads = new FileReader();
-            let file = document.getElementById("file").files[0];
+            let file = this.$refs.fileInput.files[0];
             reads.readAsDataURL(file);
-            // console.log(reads);
-
-            // console.log(event.target.parentNode.getElementsByTagName("img")[0]);
             reads.onloadend = function(e) {
-                // console.log(event);
-
-                console.log(this.result);
-                event.target.parentNode.getElementsByTagName(
-                    "img"
-                )[0].src = this.result;
-
+                console.log(_this.who);
+                const nowPicture = _this.who+ "Picture";
+                _this.$store.commit("revise",{
+                    name: nowPicture,
+                    value: this.result
+                });
                 // 选择图片区域
-                event.target.parentNode.getElementsByClassName(
-                    "editImage"
-                )[0].style.backgroundImage = "url(" + this.result + ")";
-                _this.isShowEditImg = true;
+                // event.target.parentNode.getElementsByClassName(
+                //     "editImage"
+                // )[0].style.backgroundImage = "url(" + this.result + ")";
+                // _this.isShowEditImg = true;
+
+                const getSetting = getStorage("azureSkySetting") || {};
+
+                getSetting[nowPicture] =  this.result;
+                setStorage("azureSkySetting",getSetting);
+
             };
         },
     },

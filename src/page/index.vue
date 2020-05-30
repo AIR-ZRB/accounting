@@ -44,7 +44,7 @@
 </template>
 
 <script>
-
+import {getStorage} from "../store/store.js"
 export default {
     data() {
         return {
@@ -71,7 +71,7 @@ export default {
             ],
         };
     },
-    
+
     watch: {
         $route(to) {
             this.tabActive = to.path;
@@ -97,11 +97,22 @@ export default {
         /**
          * 1. 一开始根据url重定向
          * 2. 注册全局点击事件
+         * 3. 把Storage里的数据同步到vuex里
          */
-        this.$router.push({path: this.$route.fullPath})   
-        this.tabActive = this.$route.fullPath
+        this.$router.push({ path: this.$route.fullPath });
+        this.tabActive = this.$route.fullPath;
 
         this.nowClick();
+
+        const getSetting = getStorage("azureSkySetting");
+        console.log(getSetting);
+        for(let key in getSetting){
+            // this.$store.commit("res")
+        }
+
+
+
+
     },
 };
 </script>
@@ -208,8 +219,6 @@ body {
                 }
             }
         }
-
-      
     }
 
     .broadside-enter,

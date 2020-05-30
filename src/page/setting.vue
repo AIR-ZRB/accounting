@@ -15,11 +15,13 @@
 
             <optionsFileList
                 optionName="更换头像"
+                who="master"
                 :defaultValue="this.$store.state.masterPicture"
             ></optionsFileList>
 
             <optionsFileList
                 optionName="老婆头像"
+                 who="wife"
                 :defaultValue="this.$store.state.wifePicture"
             ></optionsFileList>
         </ul>
