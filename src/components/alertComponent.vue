@@ -24,7 +24,7 @@ export default {
             let timer = setTimeout(() => {
                 clearInterval(timer);
                 this.$emit("update:showAlert",false)
-            }, 1000);
+            }, 1500);
         },
     },
 };

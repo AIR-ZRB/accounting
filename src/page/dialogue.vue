@@ -2,13 +2,13 @@
     <div>
         <div class="center" ref="screen">
             <!-- 对话组件 -->
-            <transition-group name="dialog" tag="div" class="bind-dom">
+            <transition-group name="dialog" tag="div">
                 <conversation
+                    v-for="item in Dialogue"
                     :key="item.time"
                     :person="item.person"
                     :dialogue="item.content"
                     :type="item.typeCN"
-                    v-for="item in this.Dialogue"
                     @touchstart.native="
                         (event) => selectDialog(event, item.time, +new Date())
                     "
@@ -120,7 +120,6 @@ export default {
         selectDialog(event, time, startTime) {
             this.touchData.timer && clearInterval(this.touchData.timer);
 
-            // console.log(event.target.parentNode.parentNode);
             let divDom = "";
 
             if (event.target.className === "dialogue") {
@@ -209,6 +208,11 @@ export default {
     },
     mounted() {
         this.windowScrollBottom();
+
+        if (document.documentElement.clientWidth > 500) {
+            this.showAlertMessage = "使用移动端效果更佳";
+            this.showAlert = true;
+        }
     },
     updated() {
         console.log(this.type);
