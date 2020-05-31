@@ -69,6 +69,7 @@ export default {
             todayData: [],
             statisticsMoney: 0,
             incomeMoney: 0,
+           
         };
     },
     methods: {
@@ -103,7 +104,7 @@ export default {
             // 点击今天会变蓝，且显示今天的数据
             this.clickToday = index;
 
-            let allData = getStorage("azureSky");
+            let allData = getStorage("azureSky") || [];
 
             // 计算本月总共消费
             let filterData = allData.filter((element) => {

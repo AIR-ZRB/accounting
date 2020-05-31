@@ -2,7 +2,7 @@
     <div>
         <div class="center" ref="screen">
             <!-- 对话组件 -->
-            <transition-group name="dialog">
+            <transition-group name="dialog" tag="div" class="bind-dom">
                 <conversation
                     :key="item.time"
                     :person="item.person"
@@ -118,45 +118,39 @@ export default {
         },
         // 用于删除聊天中的数据
         selectDialog(event, time, startTime) {
-            // console.log(this.touchData.timer);
             this.touchData.timer && clearInterval(this.touchData.timer);
 
-            event.target.parentNode.classList.add("shrinkAnimation");
+            // console.log(event.target.parentNode.parentNode);
+            let divDom = "";
 
-            // let flag = startTime;
-            // this.touchData.timer = setInterval(() => {
-            //     flag += 500;
-            //     // console.log(flag);
-            //     // console.log(this.touchData.end);
-            //     if (this.touchData.end - startTime > 1000) {
-            //         clearInterval(this.touchData.timer);
-            //         event.target.parentNode.classList.remove("shrinkAnimation");
-            //         // console.log("????????");
-            //     } else {
-            //         const index = this.Dialogue.findIndex((element) => {
-            //             return element.time === time;
-            //         });
-            //         this.Dialogue.splice(index, 2);
-            //         clearInterval(this.touchData.timer);
-            //     }
-            // }, 500);
+            if (event.target.className === "dialogue") {
+                divDom = event.target.parentNode;
+                divDom.classList.add("shrinkAnimation");
+            } else if (event.target.parentNode.className === "dialogue") {
+                divDom = event.target.parentNode.parentNode;
+                divDom.classList.add("shrinkAnimation");
+            }
 
-            // if (flag) {
-            // }
+            let endTime = this.touchData.end || +new Date();
+            this.touchData.end = 0;
+            this.touchData.timer = setInterval(() => {
+                endTime = +new Date();
+                if (endTime - startTime > 1000) {
+                    const index = this.Dialogue.findIndex((element) => {
+                        return element.time === time;
+                    });
+                    this.Dialogue.splice(index, 1);
+                    clearInterval(this.touchData.timer);
+                }
 
-            // if (date >= 1000) {
-                const index = this.Dialogue.findIndex((element) => {
-                    return element.time === time;
-                });
-                this.Dialogue.splice(index, 2);
-            // }else {
-            //      event.target.parentNode.classList.remove("shrinkAnimation");
-            // }
-
-            // const touchTime = endTime - this.touchData.start;
-            // if (touchTime >= 1000) {
-
-            // }
+                if (this.touchData.end) {
+                    if (this.touchData.end - startTime < 1000) {
+                        clearInterval(this.touchData.timer);
+                        divDom && divDom.classList.remove("shrinkAnimation");
+                        this.touchData.end = 0;
+                    }
+                }
+            }, 50);
         },
 
         // 让wife随机对话
@@ -201,6 +195,16 @@ export default {
     created() {
         this.Dialogue = getStorage("azureSky") || [
             { content: "你好", person: "wife", time: +new Date() + 1 },
+            {
+                content: "长按对话即可删除",
+                person: "wife",
+                time: +new Date() + 2,
+            },
+            {
+                content: "可以点击右上角的按钮进入其他页面",
+                person: "wife",
+                time: +new Date() + 3,
+            },
         ];
     },
     mounted() {

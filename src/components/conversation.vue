@@ -1,5 +1,5 @@
 <template>
-    <div :class="[pople, conversation]">
+    <div :class="[pople, conversation]" >
         <img :src="picture" alt="" />
         <p class="dialogue">
             <span>{{ this.type }}</span>
@@ -32,7 +32,7 @@ export default {
                 this.pople = this.person;
                 this.picture = this.$store.state.masterPicture;
             }
-        },
+        }
     },
     created() {
         this.who();
