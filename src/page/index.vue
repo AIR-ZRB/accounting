@@ -111,11 +111,10 @@ export default {
                 value: getSetting[key]
             })
         }
-        // console.log(this.$store.state)
-
+       
 
         
-        console.log(document.documentElement.clientWidth)
+        // console.log(document.documentElement.clientWidth)
 
         
     },

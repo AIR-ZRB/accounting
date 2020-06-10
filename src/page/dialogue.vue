@@ -86,13 +86,13 @@ export default {
                 warnText("请选择消费类型");
                 return;
             } else if (
-                money >= 1000 ||
+                money >= 100000 ||
                 money <= 0 ||
                 money === "" ||
                 /^0+(.+)/.test(money)
             ) {
-                money === "" && warnText("金额不能为空");
-                money >= 1000 && warnText("单次消费不能超过1000");
+                !money && warnText("金额不能为空");
+                money >= 100000 && warnText("单次消费不能超过100000");
                 money <= 0 && warnText("单次消费不能低于或等于0");
                 /^0+(.+)/.test(money) && warnText("请不要在金额前面加0");
                 return;
@@ -204,6 +204,17 @@ export default {
                 person: "wife",
                 time: +new Date() + 3,
             },
+            {
+                content: "点击左下角的支出可以选择消费类型",
+                person: "wife",
+                time: +new Date() + 4,
+            },
+            {
+                content:
+                    "如何电脑端按enter键可以提交，手机端则是弹出的键盘右下角的开始键提交",
+                person: "wife",
+                time: +new Date() + 5,
+            }
         ];
     },
     mounted() {
